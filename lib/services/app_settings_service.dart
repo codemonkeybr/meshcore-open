@@ -285,6 +285,22 @@ class AppSettingsService extends ChangeNotifier {
     await updateSettings(_settings.copyWith(mutedChannels: updated));
   }
 
+  bool isContactBlocked(String publicKeyHex) {
+    return _settings.blockedContacts.contains(publicKeyHex.toLowerCase());
+  }
+
+  Future<void> blockContact(String publicKeyHex) async {
+    final updated = Set<String>.from(_settings.blockedContacts)
+      ..add(publicKeyHex.toLowerCase());
+    await updateSettings(_settings.copyWith(blockedContacts: updated));
+  }
+
+  Future<void> unblockContact(String publicKeyHex) async {
+    final updated = Set<String>.from(_settings.blockedContacts)
+      ..remove(publicKeyHex.toLowerCase());
+    await updateSettings(_settings.copyWith(blockedContacts: updated));
+  }
+
   Future<void> setTcpServerAddress(String value) async {
     await updateSettings(_settings.copyWith(tcpServerAddress: value));
   }

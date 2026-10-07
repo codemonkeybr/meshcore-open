@@ -12,10 +12,12 @@ import '../utils/platform_info.dart';
 
 import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
+import '../helpers/block_contact_flow.dart';
 import '../helpers/cyr2lat.dart';
 import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
 import '../helpers/reaction_helper.dart';
+import '../widgets/blocked_tag.dart';
 import '../widgets/message_status_icon.dart';
 import '../widgets/empty_state.dart';
 import '../helpers/chat_scroll_controller.dart';
@@ -196,10 +198,23 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  contact.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        contact.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (context.watch<AppSettingsService>().isContactBlocked(
+                      contact.publicKeyHex,
+                    )) ...[
+                      const SizedBox(width: 8),
+                      const BlockedTag(),
+                    ],
+                  ],
                 ),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -249,6 +264,10 @@ class _ChatScreenState extends State<ChatScreen> {
                               TelemetryScreen(contact: widget.contact),
                         ),
                       );
+                    case 'block':
+                      confirmAndBlockContact(context, contact);
+                    case 'unblock':
+                      unblockContactWithFeedback(context, contact);
                     case 'clearChat':
                       _confirmClearChat(context, connector);
                   }
@@ -294,6 +313,39 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                   ),
+                  if (context.read<AppSettingsService>().isContactBlocked(
+                    contact.publicKeyHex,
+                  ))
+                    PopupMenuItem(
+                      value: 'unblock',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.check_circle_outline, size: 20),
+                          const SizedBox(width: 12),
+                          Text(context.l10n.block_unblockContact),
+                        ],
+                      ),
+                    )
+                  else
+                    PopupMenuItem(
+                      value: 'block',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.block,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            context.l10n.block_action,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   PopupMenuItem(
                     value: 'clearChat',
                     child: Row(
@@ -322,8 +374,12 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Consumer<MeshCoreConnector>(
         builder: (context, connector, child) {
           final messages = connector.getMessages(widget.contact);
+          final isBlocked = context
+              .watch<AppSettingsService>()
+              .isContactBlocked(widget.contact.publicKeyHex);
           return Column(
             children: [
+              if (isBlocked) _buildBlockedBanner(connector),
               Expanded(
                 child: Stack(
                   children: [
@@ -334,10 +390,75 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
-              _buildInputBar(connector),
+              isBlocked ? _buildBlockedInputBar() : _buildInputBar(connector),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildBlockedBanner(MeshCoreConnector connector) {
+    final contact = _resolveContact(connector);
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: MeshPalette.alertBg,
+        border: Border.all(color: MeshPalette.alertLine),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.block, size: 18, color: MeshPalette.alert),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  context.l10n.block_bannerTitle(contact.name),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: MeshPalette.alert,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            context.l10n.block_bannerBody(contact.name),
+            style: TextStyle(fontSize: 12.5, color: scheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton(
+            onPressed: () => unblockContactWithFeedback(context, contact),
+            child: Text(context.l10n.block_unblock),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBlockedInputBar() {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outlineVariant, width: 1)),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Text(
+            context.l10n.block_composeDisabled,
+            style: TextStyle(color: scheme.onSurfaceVariant),
+          ),
+        ),
       ),
     );
   }

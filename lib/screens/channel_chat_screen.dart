@@ -20,10 +20,12 @@ import '../helpers/gif_helper.dart';
 import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
 import '../helpers/reaction_helper.dart';
+import '../helpers/block_contact_flow.dart';
 import '../helpers/snack_bar_builder.dart';
 import '../l10n/l10n.dart';
 import '../models/channel.dart';
 import '../models/channel_message.dart';
+import '../models/contact.dart';
 import '../models/image_codec_support.dart' show aeicRatePointForUi;
 import '../models/translation_support.dart';
 import '../services/app_settings_service.dart';
@@ -2343,6 +2345,12 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
           isOutgoing: message.isOutgoing,
         ) &&
         (message.translatedText?.trim().isEmpty ?? true);
+    final senderContacts = message.isOutgoing
+        ? const <Contact>[]
+        : context.read<MeshCoreConnector>().contactsMatchingSenderName(
+            message.senderName,
+          );
+    final blockTarget = senderContacts.isEmpty ? null : senderContacts.first;
 
     showMeshSheet(
       context,
@@ -2431,6 +2439,21 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _markAsUnread(message);
+                },
+              ),
+            if (blockTarget != null)
+              ListTile(
+                leading: Icon(
+                  Icons.block,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                title: Text(
+                  context.l10n.block_actionNamed(blockTarget.name),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  confirmAndBlockContact(context, blockTarget);
                 },
               ),
             const Divider(height: 1),

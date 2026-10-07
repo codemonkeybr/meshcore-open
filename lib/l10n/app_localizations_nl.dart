@@ -5451,4 +5451,72 @@ class AppLocalizationsNl extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Meer dan 158 bytes: maximaal $count keer verzonden';
   }
+
+  @override
+  String get block_action => 'Block contact';
+
+  @override
+  String block_actionNamed(String name) {
+    return 'Block $name';
+  }
+
+  @override
+  String get block_unblock => 'Unblock';
+
+  @override
+  String get block_unblockContact => 'Unblock contact';
+
+  @override
+  String get block_tag => 'Blocked';
+
+  @override
+  String block_confirmTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String block_confirmBody(String name) {
+    return 'You will not see $name\'s messages in any channel, and their direct messages will be discarded. Messages received while blocked cannot be recovered after you unblock.';
+  }
+
+  @override
+  String block_snackBlocked(String name) {
+    return '$name blocked';
+  }
+
+  @override
+  String block_snackUnblocked(String name) {
+    return '$name unblocked';
+  }
+
+  @override
+  String get block_undo => 'Undo';
+
+  @override
+  String block_bannerTitle(String name) {
+    return 'You blocked $name';
+  }
+
+  @override
+  String block_bannerBody(String name) {
+    return 'New messages from $name are discarded. Unblock to receive them again.';
+  }
+
+  @override
+  String get block_composeDisabled => 'Unblock to send a message';
+
+  @override
+  String get block_settingsTitle => 'Blocked contacts';
+
+  @override
+  String get block_settingsSubtitle =>
+      'Hide and discard messages from specific contacts';
+
+  @override
+  String get block_settingsEmpty => 'No blocked contacts';
+
+  @override
+  String block_settingsKey(String prefix) {
+    return 'Key $prefix';
+  }
 }
