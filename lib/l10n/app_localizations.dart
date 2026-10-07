@@ -9297,6 +9297,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Over 158 bytes: sent at most {count} times'**
   String chat_longMessageRetryNote(int count);
+
+  /// No description provided for @block_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Block contact'**
+  String get block_action;
+
+  /// No description provided for @block_actionNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}'**
+  String block_actionNamed(String name);
+
+  /// No description provided for @block_unblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get block_unblock;
+
+  /// No description provided for @block_unblockContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock contact'**
+  String get block_unblockContact;
+
+  /// No description provided for @block_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked'**
+  String get block_tag;
+
+  /// No description provided for @block_confirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}?'**
+  String block_confirmTitle(String name);
+
+  /// No description provided for @block_confirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will not see {name}\'s messages in any channel, and their direct messages will be discarded. Messages received while blocked cannot be recovered after you unblock.'**
+  String block_confirmBody(String name);
+
+  /// No description provided for @block_snackBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} blocked'**
+  String block_snackBlocked(String name);
+
+  /// No description provided for @block_snackUnblocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} unblocked'**
+  String block_snackUnblocked(String name);
+
+  /// No description provided for @block_undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get block_undo;
+
+  /// No description provided for @block_bannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You blocked {name}'**
+  String block_bannerTitle(String name);
+
+  /// No description provided for @block_bannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'New messages from {name} are discarded. Unblock to receive them again.'**
+  String block_bannerBody(String name);
+
+  /// No description provided for @block_composeDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock to send a message'**
+  String get block_composeDisabled;
+
+  /// No description provided for @block_settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked contacts'**
+  String get block_settingsTitle;
+
+  /// No description provided for @block_settingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide and discard messages from specific contacts'**
+  String get block_settingsSubtitle;
+
+  /// No description provided for @block_settingsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No blocked contacts'**
+  String get block_settingsEmpty;
+
+  /// No description provided for @block_settingsKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Key {prefix}'**
+  String block_settingsKey(String prefix);
 }
 
 class _AppLocalizationsDelegate

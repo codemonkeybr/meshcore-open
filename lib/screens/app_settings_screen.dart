@@ -20,6 +20,7 @@ import '../widgets/adaptive_app_bar_title.dart';
 import '../widgets/mesh_ui.dart';
 import '../widgets/sync_progress_overlay.dart';
 import '../helpers/snack_bar_builder.dart';
+import 'blocked_contacts_screen.dart';
 import 'map_cache_screen.dart';
 
 class AppSettingsScreen extends StatelessWidget {
@@ -88,6 +89,25 @@ class AppSettingsScreen extends StatelessWidget {
                           child: _buildMessagingContent(
                             context,
                             settingsService,
+                          ),
+                        ),
+
+                        // BLOCKED CONTACTS
+                        SectionHeader(context.l10n.block_settingsTitle),
+                        MeshCard(
+                          padding: EdgeInsets.zero,
+                          child: ListTile(
+                            leading: const Icon(Icons.block),
+                            title: Text(context.l10n.block_settingsTitle),
+                            subtitle: Text(context.l10n.block_settingsSubtitle),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const BlockedContactsScreen(),
+                              ),
+                            ),
                           ),
                         ),
 

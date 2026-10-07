@@ -3106,5 +3106,78 @@
         "type": "int"
       }
     }
+  },
+  "block_action": "Block contact",
+  "block_actionNamed": "Block {name}",
+  "@block_actionNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_unblock": "Unblock",
+  "block_unblockContact": "Unblock contact",
+  "block_tag": "Blocked",
+  "block_confirmTitle": "Block {name}?",
+  "@block_confirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_confirmBody": "You will not see {name}'s messages in any channel, and their direct messages will be discarded. Messages received while blocked cannot be recovered after you unblock.",
+  "@block_confirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_snackBlocked": "{name} blocked",
+  "@block_snackBlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_snackUnblocked": "{name} unblocked",
+  "@block_snackUnblocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_undo": "Undo",
+  "block_bannerTitle": "You blocked {name}",
+  "@block_bannerTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_bannerBody": "New messages from {name} are discarded. Unblock to receive them again.",
+  "@block_bannerBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_composeDisabled": "Unblock to send a message",
+  "block_settingsTitle": "Blocked contacts",
+  "block_settingsSubtitle": "Hide and discard messages from specific contacts",
+  "block_settingsEmpty": "No blocked contacts",
+  "block_settingsKey": "Key {prefix}",
+  "@block_settingsKey": {
+    "placeholders": {
+      "prefix": {
+        "type": "String"
+      }
+    }
   }
 }

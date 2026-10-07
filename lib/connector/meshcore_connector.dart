@@ -5750,6 +5750,34 @@ class MeshCoreConnector extends ChangeNotifier {
     }
   }
 
+  bool isContactBlocked(String publicKeyHex) =>
+      _appSettingsService?.isContactBlocked(publicKeyHex) ?? false;
+
+  /// Chat contacts whose advertised name matches [senderName], the same
+  /// name-based association used to attribute channel messages to contacts.
+  List<Contact> contactsMatchingSenderName(String senderName) {
+    final normalized = senderName.trim().toLowerCase();
+    if (normalized.isEmpty || normalized == 'unknown') return const [];
+    return _contacts
+        .where(
+          (c) =>
+              c.type == advTypeChat &&
+              c.name.trim().toLowerCase() == normalized,
+        )
+        .toList();
+  }
+
+  /// True when the channel message sender is a blocked contact. Matches on the
+  /// public key when known, otherwise on a contact with the same name. A
+  /// sender that cannot be tied to a known contact is never blocked.
+  bool isChannelSenderBlocked(String senderName, String? senderKeyHex) {
+    if (_appSettingsService == null) return false;
+    if (senderKeyHex != null && isContactBlocked(senderKeyHex)) return true;
+    return contactsMatchingSenderName(
+      senderName,
+    ).any((c) => isContactBlocked(c.publicKeyHex));
+  }
+
   void _updateContactLastMessageAtByName(
     String senderName,
     DateTime timestamp, {
@@ -5860,6 +5888,10 @@ class MeshCoreConnector extends ChangeNotifier {
           message.senderKeyHex == pubKeyToHex(_selfPublicKey!) &&
           (message.pathLength == null || message.pathLength == 0)) {
         debugPrint('Ignoring direct message from self');
+        return;
+      }
+
+      if (!message.isOutgoing && isContactBlocked(message.senderKeyHex)) {
         return;
       }
 
@@ -6272,6 +6304,9 @@ class MeshCoreConnector extends ChangeNotifier {
       if (_shouldDropSelfChannelMessage(parsed.senderName, parsed.pathBytes)) {
         return;
       }
+      if (isChannelSenderBlocked(parsed.senderName, parsed.senderKeyHex)) {
+        return;
+      }
       _lastChannelMsgRxTime = DateTime.now();
       final contentHash = _computeContentHash(
         parsed.channelIndex!,
@@ -6349,6 +6384,10 @@ class MeshCoreConnector extends ChangeNotifier {
             packet.payloadType,
             packet.payload,
           );
+
+          if (isChannelSenderBlocked(parsed.senderName, null)) {
+            return;
+          }
 
           final message = ChannelMessage(
             senderKey: null,

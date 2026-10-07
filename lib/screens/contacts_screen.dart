@@ -24,6 +24,7 @@ import '../utils/disconnect_navigation_mixin.dart';
 import '../utils/emoji_utils.dart';
 import '../utils/route_transitions.dart';
 import '../widgets/list_filter_widget.dart';
+import '../widgets/blocked_tag.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/mesh_ui.dart';
 import '../widgets/quick_switch_bar.dart';
@@ -31,7 +32,9 @@ import '../widgets/repeater_login_dialog.dart';
 import '../widgets/room_login_dialog.dart';
 import '../widgets/sync_progress_overlay.dart';
 import '../widgets/unread_badge.dart';
+import '../helpers/block_contact_flow.dart';
 import '../helpers/snack_bar_builder.dart';
+import '../services/app_settings_service.dart';
 import 'channels_screen.dart';
 import 'chat_screen.dart';
 import 'contact_qr_scanner_screen.dart';
@@ -995,6 +998,9 @@ class _ContactsScreenState extends State<ContactsScreen>
                         lastSeen: _resolveLastSeen(contact),
                         unreadCount: unreadCount,
                         isFavorite: contact.isFavorite,
+                        isBlocked: context
+                            .watch<AppSettingsService>()
+                            .isContactBlocked(contact.publicKeyHex),
                         onTap: () => _openChat(context, contact),
                         onLongPress: () =>
                             _showContactOptions(context, connector, contact),
@@ -1435,6 +1441,9 @@ class _ContactsScreenState extends State<ContactsScreen>
     final isRepeater = contact.type == advTypeRepeater;
     final isRoom = contact.type == advTypeRoom;
     final isFavorite = contact.isFavorite;
+    final isBlocked = context.read<AppSettingsService>().isContactBlocked(
+      contact.publicKeyHex,
+    );
 
     showMeshSheet(
       context,
@@ -1572,6 +1581,30 @@ class _ContactsScreenState extends State<ContactsScreen>
               },
             ),
             ListTile(
+              leading: Icon(
+                isBlocked ? Icons.check_circle_outline : Icons.block,
+                color: isBlocked
+                    ? MeshPalette.blue
+                    : Theme.of(context).colorScheme.error,
+              ),
+              title: Text(
+                isBlocked
+                    ? context.l10n.block_unblockContact
+                    : context.l10n.block_action,
+                style: isBlocked
+                    ? null
+                    : TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                if (isBlocked) {
+                  unblockContactWithFeedback(context, contact);
+                } else {
+                  confirmAndBlockContact(context, contact);
+                }
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.copy),
               title: Text(context.l10n.contacts_ShareContact),
               onTap: () {
@@ -1674,6 +1707,7 @@ class _ContactTile extends StatelessWidget {
   final DateTime lastSeen;
   final int unreadCount;
   final bool isFavorite;
+  final bool isBlocked;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final VoidCallback? onManage;
@@ -1684,6 +1718,7 @@ class _ContactTile extends StatelessWidget {
     required this.lastSeen,
     required this.unreadCount,
     required this.isFavorite,
+    required this.isBlocked,
     required this.onTap,
     required this.onLongPress,
     this.onManage,
@@ -1733,7 +1768,19 @@ class _ContactTile extends StatelessWidget {
         child: Row(
           children: [
             // Avatar
-            if (emoji != null)
+            if (isBlocked)
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: MeshPalette.alertBg,
+                  border: Border.all(color: MeshPalette.alertLine),
+                ),
+                alignment: Alignment.center,
+                child: Icon(Icons.block, size: 20, color: MeshPalette.alert),
+              )
+            else if (emoji != null)
               Container(
                 width: 42,
                 height: 42,
@@ -1772,10 +1819,19 @@ class _ContactTile extends StatelessWidget {
                                 ? FontWeight.w700
                                 : FontWeight.w500,
                             fontSize: 15,
-                            color: scheme.onSurface,
+                            color: isBlocked
+                                ? scheme.onSurfaceVariant
+                                : scheme.onSurface,
+                            decoration: isBlocked
+                                ? TextDecoration.lineThrough
+                                : null,
                           ),
                         ),
                       ),
+                      if (isBlocked) ...[
+                        const SizedBox(width: 6),
+                        const BlockedTag(),
+                      ],
                       if (isFavorite) ...[
                         const SizedBox(width: 4),
                         Icon(Icons.star, size: 13, color: MeshPalette.warn),
@@ -1894,6 +1950,7 @@ class _ContactTileEntrance extends StatelessWidget {
   final DateTime lastSeen;
   final int unreadCount;
   final bool isFavorite;
+  final bool isBlocked;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final VoidCallback? onManage;
@@ -1905,6 +1962,7 @@ class _ContactTileEntrance extends StatelessWidget {
     required this.lastSeen,
     required this.unreadCount,
     required this.isFavorite,
+    required this.isBlocked,
     required this.onTap,
     required this.onLongPress,
     this.onManage,
@@ -1920,6 +1978,7 @@ class _ContactTileEntrance extends StatelessWidget {
         lastSeen: lastSeen,
         unreadCount: unreadCount,
         isFavorite: isFavorite,
+        isBlocked: isBlocked,
         onTap: onTap,
         onLongPress: onLongPress,
         onManage: onManage,
