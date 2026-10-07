@@ -3179,5 +3179,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "block_unblockNamed": "Unblock {name}",
+  "@block_unblockNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_settingsByName": "Blocked by name"
 }

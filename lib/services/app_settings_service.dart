@@ -301,6 +301,22 @@ class AppSettingsService extends ChangeNotifier {
     await updateSettings(_settings.copyWith(blockedContacts: updated));
   }
 
+  /// Channel messages carry only a display name, so senders can also be
+  /// blocked by name. Matching is exact and case-sensitive.
+  bool isNameBlocked(String name) {
+    return _settings.blockedNames.contains(name);
+  }
+
+  Future<void> blockName(String name) async {
+    final updated = Set<String>.from(_settings.blockedNames)..add(name);
+    await updateSettings(_settings.copyWith(blockedNames: updated));
+  }
+
+  Future<void> unblockName(String name) async {
+    final updated = Set<String>.from(_settings.blockedNames)..remove(name);
+    await updateSettings(_settings.copyWith(blockedNames: updated));
+  }
+
   Future<void> setTcpServerAddress(String value) async {
     await updateSettings(_settings.copyWith(tcpServerAddress: value));
   }

@@ -5767,12 +5767,13 @@ class MeshCoreConnector extends ChangeNotifier {
         .toList();
   }
 
-  /// True when the channel message sender is a blocked contact. Matches on the
-  /// public key when known, otherwise on a contact with the same name. A
-  /// sender that cannot be tied to a known contact is never blocked.
+  /// True when the channel message sender is blocked: by public key when the
+  /// message has one, by an exact blocked display name, or because a contact
+  /// with the same name is blocked.
   bool isChannelSenderBlocked(String senderName, String? senderKeyHex) {
     if (_appSettingsService == null) return false;
     if (senderKeyHex != null && isContactBlocked(senderKeyHex)) return true;
+    if (_appSettingsService!.isNameBlocked(senderName)) return true;
     return contactsMatchingSenderName(
       senderName,
     ).any((c) => isContactBlocked(c.publicKeyHex));

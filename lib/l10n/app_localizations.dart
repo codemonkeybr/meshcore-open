@@ -9399,6 +9399,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Key {prefix}'**
   String block_settingsKey(String prefix);
+
+  /// No description provided for @block_unblockNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String block_unblockNamed(String name);
+
+  /// No description provided for @block_settingsByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked by name'**
+  String get block_settingsByName;
 }
 
 class _AppLocalizationsDelegate

@@ -36,6 +36,29 @@ void main() {
     });
   });
 
+  group('blockedNames setting', () {
+    test('round-trips through json without changing case', () {
+      final settings = AppSettings(blockedNames: {'Bruno', 'bruno'});
+      final restored = AppSettings.fromJson(settings.toJson());
+      expect(restored.blockedNames, {'Bruno', 'bruno'});
+    });
+
+    test('fromJson without the field yields an empty set', () {
+      expect(AppSettings.fromJson(const {}).blockedNames, isEmpty);
+    });
+  });
+
+  group('AppSettingsService name blocking', () {
+    test('matches the exact name only', () async {
+      final service = AppSettingsService();
+      await service.blockName('Bruno');
+      expect(service.isNameBlocked('Bruno'), isTrue);
+      expect(service.isNameBlocked('bruno'), isFalse);
+      await service.unblockName('Bruno');
+      expect(service.isNameBlocked('Bruno'), isFalse);
+    });
+  });
+
   group('AppSettingsService block/unblock', () {
     test('block then unblock toggles isContactBlocked', () async {
       final service = AppSettingsService();

@@ -5568,4 +5568,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String block_settingsKey(String prefix) {
     return 'Key $prefix';
   }
+
+  @override
+  String block_unblockNamed(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String get block_settingsByName => 'Blocked by name';
 }
