@@ -5215,4 +5215,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return '158バイトを超える場合：最大 $count 回まで送信されます';
   }
+
+  @override
+  String get neighbors_showMap => 'Show map';
+
+  @override
+  String get neighbors_showList => 'Show list';
+
+  @override
+  String get neighbors_mapNothingToShow =>
+      'No neighbors with GPS coordinates to show on the map.';
+
+  @override
+  String neighbors_notOnMap(int count, int total) {
+    return '$count of $total neighbors not on map';
+  }
+
+  @override
+  String get neighbors_repeaterNoLocation =>
+      'This repeater has no GPS position, links hidden';
+
+  @override
+  String neighbors_noGpsToast(String name) {
+    return '$name can\'t be shown on the map because it has no GPS coordinates.';
+  }
 }

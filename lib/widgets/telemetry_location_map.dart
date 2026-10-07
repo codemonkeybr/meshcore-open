@@ -127,7 +127,7 @@ class _TelemetryLocationMapState extends State<TelemetryLocationMap> {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: _MapButton(
+                    child: MapControlButton(
                       icon: Icons.filter_list,
                       tooltip: context.l10n.map_filterNodes,
                       onPressed: () =>
@@ -139,19 +139,19 @@ class _TelemetryLocationMapState extends State<TelemetryLocationMap> {
                     top: 8,
                     child: Column(
                       children: [
-                        _MapButton(
+                        MapControlButton(
                           icon: Icons.add,
                           tooltip: context.l10n.map_zoomIn,
                           onPressed: () => _zoomBy(1),
                         ),
                         const SizedBox(height: 6),
-                        _MapButton(
+                        MapControlButton(
                           icon: Icons.remove,
                           tooltip: context.l10n.map_zoomOut,
                           onPressed: () => _zoomBy(-1),
                         ),
                         const SizedBox(height: 6),
-                        _MapButton(
+                        MapControlButton(
                           icon: Icons.my_location,
                           tooltip: context.l10n.map_centerMap,
                           onPressed: () =>
@@ -192,7 +192,7 @@ class _TelemetryLocationMapState extends State<TelemetryLocationMap> {
       width: 44,
       height: 44,
       child: IgnorePointer(
-        child: _MarkerBubble(
+        child: MapMarkerBubble(
           color: Colors.red,
           icon: _getNodeIcon(widget.contactType),
           size: 24,
@@ -207,7 +207,7 @@ class _TelemetryLocationMapState extends State<TelemetryLocationMap> {
       width: 34,
       height: 34,
       child: IgnorePointer(
-        child: _MarkerBubble(
+        child: MapMarkerBubble(
           color: _getNodeColor(contact.type),
           icon: _getNodeIcon(contact.type),
           size: 18,
@@ -358,12 +358,13 @@ class _TelemetryLocationMapState extends State<TelemetryLocationMap> {
   }
 }
 
-class _MarkerBubble extends StatelessWidget {
+class MapMarkerBubble extends StatelessWidget {
   final Color color;
   final IconData icon;
   final double size;
 
-  const _MarkerBubble({
+  const MapMarkerBubble({
+    super.key,
     required this.color,
     required this.icon,
     required this.size,
@@ -391,12 +392,13 @@ class _MarkerBubble extends StatelessWidget {
   }
 }
 
-class _MapButton extends StatelessWidget {
+class MapControlButton extends StatelessWidget {
   final IconData icon;
   final String tooltip;
   final VoidCallback onPressed;
 
-  const _MapButton({
+  const MapControlButton({
+    super.key,
     required this.icon,
     required this.tooltip,
     required this.onPressed,

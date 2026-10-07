@@ -9297,6 +9297,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Over 158 bytes: sent at most {count} times'**
   String chat_longMessageRetryNote(int count);
+
+  /// No description provided for @neighbors_showMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Show map'**
+  String get neighbors_showMap;
+
+  /// No description provided for @neighbors_showList.
+  ///
+  /// In en, this message translates to:
+  /// **'Show list'**
+  String get neighbors_showList;
+
+  /// No description provided for @neighbors_mapNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'No neighbors with GPS coordinates to show on the map.'**
+  String get neighbors_mapNothingToShow;
+
+  /// No description provided for @neighbors_notOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} neighbors not on map'**
+  String neighbors_notOnMap(int count, int total);
+
+  /// No description provided for @neighbors_repeaterNoLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'This repeater has no GPS position, links hidden'**
+  String get neighbors_repeaterNoLocation;
+
+  /// No description provided for @neighbors_noGpsToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} can\'t be shown on the map because it has no GPS coordinates.'**
+  String neighbors_noGpsToast(String name);
 }
 
 class _AppLocalizationsDelegate
