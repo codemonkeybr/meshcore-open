@@ -5549,6 +5549,14 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String block_unblockNamed(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String get block_settingsByName => 'Blocked by name';
+
+  @override
   String get neighbors_showMap => 'Show map';
 
   @override

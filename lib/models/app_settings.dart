@@ -120,6 +120,7 @@ class AppSettings {
   final UnitSystem unitSystem;
   final Set<String> mutedChannels;
   final Set<String> blockedContacts;
+  final Set<String> blockedNames;
   final bool mapShowDiscoveryContacts;
   final String tcpServerAddress;
   final int tcpServerPort;
@@ -227,6 +228,7 @@ class AppSettings {
     this.unitSystem = UnitSystem.metric,
     Set<String>? mutedChannels,
     Set<String>? blockedContacts,
+    Set<String>? blockedNames,
     this.mapShowDiscoveryContacts = true,
     this.tcpServerAddress = '',
     this.tcpServerPort = 0,
@@ -251,6 +253,7 @@ class AppSettings {
        batteryChemistryByRepeaterId = batteryChemistryByRepeaterId ?? {},
        mutedChannels = mutedChannels ?? {},
        blockedContacts = blockedContacts ?? {},
+       blockedNames = blockedNames ?? {},
        imageCodecDownloadedModels = imageCodecDownloadedModels ?? const [],
        translationDownloadedModels = translationDownloadedModels ?? const [],
        cyr2latProfiles =
@@ -308,6 +311,7 @@ class AppSettings {
       'unit_system': unitSystem.value,
       'muted_channels': mutedChannels.toList(),
       'blocked_contacts': blockedContacts.toList(),
+      'blocked_names': blockedNames.toList(),
       'map_show_discovery_contacts': mapShowDiscoveryContacts,
       'tcp_server_address': tcpServerAddress,
       'tcp_server_port': tcpServerPort,
@@ -412,6 +416,11 @@ class AppSettings {
       blockedContacts:
           ((json['blocked_contacts'] as List?)
               ?.map((e) => e.toString().toLowerCase())
+              .toSet()) ??
+          {},
+      blockedNames:
+          ((json['blocked_names'] as List?)
+              ?.map((e) => e.toString())
               .toSet()) ??
           {},
       mapShowDiscoveryContacts:
@@ -533,6 +542,7 @@ class AppSettings {
     UnitSystem? unitSystem,
     Set<String>? mutedChannels,
     Set<String>? blockedContacts,
+    Set<String>? blockedNames,
     bool? mapShowDiscoveryContacts,
     String? tcpServerAddress,
     int? tcpServerPort,
@@ -613,6 +623,7 @@ class AppSettings {
       unitSystem: unitSystem ?? this.unitSystem,
       mutedChannels: mutedChannels ?? this.mutedChannels,
       blockedContacts: blockedContacts ?? this.blockedContacts,
+      blockedNames: blockedNames ?? this.blockedNames,
       mapShowDiscoveryContacts:
           mapShowDiscoveryContacts ?? this.mapShowDiscoveryContacts,
       tcpServerAddress: tcpServerAddress ?? this.tcpServerAddress,

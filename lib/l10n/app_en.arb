@@ -3180,6 +3180,15 @@
       }
     }
   },
+  "block_unblockNamed": "Unblock {name}",
+  "@block_unblockNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "block_settingsByName": "Blocked by name",
   "neighbors_showMap": "Show map",
   "neighbors_showList": "Show list",
   "neighbors_mapNothingToShow": "No neighbors with GPS coordinates to show on the map.",

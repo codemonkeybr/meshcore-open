@@ -25,7 +25,6 @@ import '../helpers/snack_bar_builder.dart';
 import '../l10n/l10n.dart';
 import '../models/channel.dart';
 import '../models/channel_message.dart';
-import '../models/contact.dart';
 import '../models/image_codec_support.dart' show aeicRatePointForUi;
 import '../models/translation_support.dart';
 import '../services/app_settings_service.dart';
@@ -2345,12 +2344,13 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
           isOutgoing: message.isOutgoing,
         ) &&
         (message.translatedText?.trim().isEmpty ?? true);
-    final senderContacts = message.isOutgoing
-        ? const <Contact>[]
-        : context.read<MeshCoreConnector>().contactsMatchingSenderName(
-            message.senderName,
-          );
-    final blockTarget = senderContacts.isEmpty ? null : senderContacts.first;
+    final canBlockSender = !message.isOutgoing && message.senderName.isNotEmpty;
+    final senderBlocked =
+        canBlockSender &&
+        context.read<MeshCoreConnector>().isChannelSenderBlocked(
+          message.senderName,
+          message.senderKeyHex,
+        );
 
     showMeshSheet(
       context,
@@ -2441,19 +2441,29 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                   _markAsUnread(message);
                 },
               ),
-            if (blockTarget != null)
+            if (canBlockSender)
               ListTile(
                 leading: Icon(
-                  Icons.block,
-                  color: Theme.of(context).colorScheme.error,
+                  senderBlocked ? Icons.check_circle_outline : Icons.block,
+                  color: senderBlocked
+                      ? MeshPalette.blue
+                      : Theme.of(context).colorScheme.error,
                 ),
                 title: Text(
-                  context.l10n.block_actionNamed(blockTarget.name),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  senderBlocked
+                      ? context.l10n.block_unblockNamed(message.senderName)
+                      : context.l10n.block_actionNamed(message.senderName),
+                  style: senderBlocked
+                      ? null
+                      : TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  confirmAndBlockContact(context, blockTarget);
+                  if (senderBlocked) {
+                    unblockSenderWithFeedback(context, message.senderName);
+                  } else {
+                    confirmAndBlockSender(context, message.senderName);
+                  }
                 },
               ),
             const Divider(height: 1),
