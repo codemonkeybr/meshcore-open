@@ -13,6 +13,7 @@ import '../utils/platform_info.dart';
 import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
 import '../helpers/block_contact_flow.dart';
+import '../helpers/mute_contact_flow.dart';
 import '../helpers/ack_text.dart';
 import '../helpers/cyr2lat.dart';
 import '../helpers/message_url_image_helper.dart';
@@ -215,6 +216,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       const SizedBox(width: 8),
                       const BlockedTag(),
                     ],
+                    if (context.watch<AppSettingsService>().isContactMuted(
+                      contact.publicKeyHex,
+                    )) ...[
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.notifications_off_outlined,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ],
                   ],
                 ),
                 GestureDetector(
@@ -269,6 +280,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       confirmAndBlockContact(context, contact);
                     case 'unblock':
                       unblockContactWithFeedback(context, contact);
+                    case 'mute':
+                      muteContactWithFeedback(context, contact);
+                    case 'unmute':
+                      unmuteContactWithFeedback(context, contact);
                     case 'clearChat':
                       _confirmClearChat(context, connector);
                   }
@@ -311,6 +326,34 @@ class _ChatScreenState extends State<ChatScreen> {
                         const Icon(Icons.settings, size: 20),
                         const SizedBox(width: 12),
                         Text(context.l10n.contact_settings),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value:
+                        context.read<AppSettingsService>().isContactMuted(
+                          contact.publicKeyHex,
+                        )
+                        ? 'unmute'
+                        : 'mute',
+                    child: Row(
+                      children: [
+                        Icon(
+                          context.read<AppSettingsService>().isContactMuted(
+                                contact.publicKeyHex,
+                              )
+                              ? Icons.notifications_active_outlined
+                              : Icons.notifications_off_outlined,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          context.read<AppSettingsService>().isContactMuted(
+                                contact.publicKeyHex,
+                              )
+                              ? context.l10n.mute_unmuteContact
+                              : context.l10n.mute_action,
+                        ),
                       ],
                     ),
                   ),

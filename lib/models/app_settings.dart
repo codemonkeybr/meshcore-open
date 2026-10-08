@@ -121,6 +121,8 @@ class AppSettings {
   final Set<String> mutedChannels;
   final Set<String> blockedContacts;
   final Set<String> blockedNames;
+  final Set<String> mutedContacts;
+  final Set<String> mutedNames;
   final bool mapShowDiscoveryContacts;
   final String tcpServerAddress;
   final int tcpServerPort;
@@ -229,6 +231,8 @@ class AppSettings {
     Set<String>? mutedChannels,
     Set<String>? blockedContacts,
     Set<String>? blockedNames,
+    Set<String>? mutedContacts,
+    Set<String>? mutedNames,
     this.mapShowDiscoveryContacts = true,
     this.tcpServerAddress = '',
     this.tcpServerPort = 0,
@@ -254,6 +258,8 @@ class AppSettings {
        mutedChannels = mutedChannels ?? {},
        blockedContacts = blockedContacts ?? {},
        blockedNames = blockedNames ?? {},
+       mutedContacts = mutedContacts ?? {},
+       mutedNames = mutedNames ?? {},
        imageCodecDownloadedModels = imageCodecDownloadedModels ?? const [],
        translationDownloadedModels = translationDownloadedModels ?? const [],
        cyr2latProfiles =
@@ -312,6 +318,8 @@ class AppSettings {
       'muted_channels': mutedChannels.toList(),
       'blocked_contacts': blockedContacts.toList(),
       'blocked_names': blockedNames.toList(),
+      'muted_contacts': mutedContacts.toList(),
+      'muted_names': mutedNames.toList(),
       'map_show_discovery_contacts': mapShowDiscoveryContacts,
       'tcp_server_address': tcpServerAddress,
       'tcp_server_port': tcpServerPort,
@@ -422,6 +430,14 @@ class AppSettings {
           ((json['blocked_names'] as List?)
               ?.map((e) => e.toString())
               .toSet()) ??
+          {},
+      mutedContacts:
+          ((json['muted_contacts'] as List?)
+              ?.map((e) => e.toString().toLowerCase())
+              .toSet()) ??
+          {},
+      mutedNames:
+          ((json['muted_names'] as List?)?.map((e) => e.toString()).toSet()) ??
           {},
       mapShowDiscoveryContacts:
           json['map_show_discovery_contacts'] as bool? ?? true,
@@ -543,6 +559,8 @@ class AppSettings {
     Set<String>? mutedChannels,
     Set<String>? blockedContacts,
     Set<String>? blockedNames,
+    Set<String>? mutedContacts,
+    Set<String>? mutedNames,
     bool? mapShowDiscoveryContacts,
     String? tcpServerAddress,
     int? tcpServerPort,
@@ -624,6 +642,8 @@ class AppSettings {
       mutedChannels: mutedChannels ?? this.mutedChannels,
       blockedContacts: blockedContacts ?? this.blockedContacts,
       blockedNames: blockedNames ?? this.blockedNames,
+      mutedContacts: mutedContacts ?? this.mutedContacts,
+      mutedNames: mutedNames ?? this.mutedNames,
       mapShowDiscoveryContacts:
           mapShowDiscoveryContacts ?? this.mapShowDiscoveryContacts,
       tcpServerAddress: tcpServerAddress ?? this.tcpServerAddress,

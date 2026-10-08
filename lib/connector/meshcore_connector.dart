@@ -5750,6 +5750,21 @@ class MeshCoreConnector extends ChangeNotifier {
     }
   }
 
+  bool isContactMuted(String publicKeyHex) =>
+      _appSettingsService?.isContactMuted(publicKeyHex) ?? false;
+
+  /// True when the sender should not trigger a notification or sound: muted by
+  /// public key, by exact display name, or because a contact with the same
+  /// name is muted.
+  bool isSenderMuted(String senderName, String? senderKeyHex) {
+    if (_appSettingsService == null) return false;
+    if (senderKeyHex != null && isContactMuted(senderKeyHex)) return true;
+    if (_appSettingsService!.isNameMuted(senderName)) return true;
+    return contactsMatchingSenderName(
+      senderName,
+    ).any((c) => isContactMuted(c.publicKeyHex));
+  }
+
   bool isContactBlocked(String publicKeyHex) =>
       _appSettingsService?.isContactBlocked(publicKeyHex) ?? false;
 
@@ -5930,7 +5945,9 @@ class MeshCoreConnector extends ChangeNotifier {
           !message.isCli &&
           _appSettingsService != null) {
         final settings = _appSettingsService!.settings;
-        if (settings.notificationsEnabled && settings.notifyOnNewMessage) {
+        if (settings.notificationsEnabled &&
+            settings.notifyOnNewMessage &&
+            !isContactMuted(message.senderKeyHex)) {
           final msg = message; // capture for closure
           final c = contact; // capture contact reference
           unawaited(() async {
@@ -6258,6 +6275,7 @@ class MeshCoreConnector extends ChangeNotifier {
     if (!settings.notificationsEnabled || !settings.notifyOnNewChannelMessage) {
       return;
     }
+    if (isSenderMuted(message.senderName, message.senderKeyHex)) return;
 
     final label = channelName ?? _channelDisplayName(channelIndex);
     if (_appSettingsService!.isChannelMuted(label)) return;

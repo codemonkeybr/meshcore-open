@@ -33,6 +33,7 @@ import '../widgets/room_login_dialog.dart';
 import '../widgets/sync_progress_overlay.dart';
 import '../widgets/unread_badge.dart';
 import '../helpers/block_contact_flow.dart';
+import '../helpers/mute_contact_flow.dart';
 import '../helpers/snack_bar_builder.dart';
 import '../services/app_settings_service.dart';
 import 'channels_screen.dart';
@@ -1001,6 +1002,9 @@ class _ContactsScreenState extends State<ContactsScreen>
                         isBlocked: context
                             .watch<AppSettingsService>()
                             .isContactBlocked(contact.publicKeyHex),
+                        isMuted: context
+                            .watch<AppSettingsService>()
+                            .isContactMuted(contact.publicKeyHex),
                         onTap: () => _openChat(context, contact),
                         onLongPress: () =>
                             _showContactOptions(context, connector, contact),
@@ -1444,6 +1448,9 @@ class _ContactsScreenState extends State<ContactsScreen>
     final isBlocked = context.read<AppSettingsService>().isContactBlocked(
       contact.publicKeyHex,
     );
+    final isMuted = context.read<AppSettingsService>().isContactMuted(
+      contact.publicKeyHex,
+    );
 
     showMeshSheet(
       context,
@@ -1582,6 +1589,27 @@ class _ContactsScreenState extends State<ContactsScreen>
             ),
             ListTile(
               leading: Icon(
+                isMuted
+                    ? Icons.notifications_active_outlined
+                    : Icons.notifications_off_outlined,
+                color: MeshPalette.warn,
+              ),
+              title: Text(
+                isMuted
+                    ? context.l10n.mute_unmuteContact
+                    : context.l10n.mute_action,
+              ),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                if (isMuted) {
+                  unmuteContactWithFeedback(context, contact);
+                } else {
+                  muteContactWithFeedback(context, contact);
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(
                 isBlocked ? Icons.check_circle_outline : Icons.block,
                 color: isBlocked
                     ? MeshPalette.blue
@@ -1708,6 +1736,7 @@ class _ContactTile extends StatelessWidget {
   final int unreadCount;
   final bool isFavorite;
   final bool isBlocked;
+  final bool isMuted;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final VoidCallback? onManage;
@@ -1719,6 +1748,7 @@ class _ContactTile extends StatelessWidget {
     required this.unreadCount,
     required this.isFavorite,
     required this.isBlocked,
+    required this.isMuted,
     required this.onTap,
     required this.onLongPress,
     this.onManage,
@@ -1831,6 +1861,14 @@ class _ContactTile extends StatelessWidget {
                       if (isBlocked) ...[
                         const SizedBox(width: 6),
                         const BlockedTag(),
+                      ],
+                      if (isMuted) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.notifications_off_outlined,
+                          size: 13,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ],
                       if (isFavorite) ...[
                         const SizedBox(width: 4),
@@ -1951,6 +1989,7 @@ class _ContactTileEntrance extends StatelessWidget {
   final int unreadCount;
   final bool isFavorite;
   final bool isBlocked;
+  final bool isMuted;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final VoidCallback? onManage;
@@ -1963,6 +2002,7 @@ class _ContactTileEntrance extends StatelessWidget {
     required this.unreadCount,
     required this.isFavorite,
     required this.isBlocked,
+    required this.isMuted,
     required this.onTap,
     required this.onLongPress,
     this.onManage,
@@ -1979,6 +2019,7 @@ class _ContactTileEntrance extends StatelessWidget {
         unreadCount: unreadCount,
         isFavorite: isFavorite,
         isBlocked: isBlocked,
+        isMuted: isMuted,
         onTap: onTap,
         onLongPress: onLongPress,
         onManage: onManage,

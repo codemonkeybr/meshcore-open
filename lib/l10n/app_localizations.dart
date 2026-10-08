@@ -9453,6 +9453,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} can\'t be shown on the map because it has no GPS coordinates.'**
   String neighbors_noGpsToast(String name);
+
+  /// No description provided for @mute_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute contact'**
+  String get mute_action;
+
+  /// No description provided for @mute_unmuteContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute contact'**
+  String get mute_unmuteContact;
+
+  /// No description provided for @mute_actionNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute {name}'**
+  String mute_actionNamed(String name);
+
+  /// No description provided for @mute_unmuteNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute {name}'**
+  String mute_unmuteNamed(String name);
+
+  /// No description provided for @mute_snackMuted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} muted'**
+  String mute_snackMuted(String name);
+
+  /// No description provided for @mute_snackUnmuted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} unmuted'**
+  String mute_snackUnmuted(String name);
+
+  /// No description provided for @mute_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted'**
+  String get mute_tag;
+
+  /// No description provided for @mute_unmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get mute_unmute;
+
+  /// No description provided for @mute_settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted contacts'**
+  String get mute_settingsTitle;
+
+  /// No description provided for @mute_settingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages arrive, but with no notification or sound'**
+  String get mute_settingsSubtitle;
+
+  /// No description provided for @mute_settingsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No muted contacts'**
+  String get mute_settingsEmpty;
+
+  /// No description provided for @mute_settingsByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted by name'**
+  String get mute_settingsByName;
 }
 
 class _AppLocalizationsDelegate

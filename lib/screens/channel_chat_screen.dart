@@ -21,6 +21,7 @@ import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
 import '../helpers/reaction_helper.dart';
 import '../helpers/block_contact_flow.dart';
+import '../helpers/mute_contact_flow.dart';
 import '../helpers/ack_text.dart';
 import '../helpers/snack_bar_builder.dart';
 import '../l10n/l10n.dart';
@@ -2352,6 +2353,12 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
           message.senderName,
           message.senderKeyHex,
         );
+    final senderMuted =
+        canBlockSender &&
+        context.read<MeshCoreConnector>().isSenderMuted(
+          message.senderName,
+          message.senderKeyHex,
+        );
 
     showMeshSheet(
       context,
@@ -2449,6 +2456,28 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _markAsUnread(message);
+                },
+              ),
+            if (canBlockSender)
+              ListTile(
+                leading: Icon(
+                  senderMuted
+                      ? Icons.notifications_active_outlined
+                      : Icons.notifications_off_outlined,
+                  color: MeshPalette.warn,
+                ),
+                title: Text(
+                  senderMuted
+                      ? context.l10n.mute_unmuteNamed(message.senderName)
+                      : context.l10n.mute_actionNamed(message.senderName),
+                ),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  if (senderMuted) {
+                    unmuteSenderWithFeedback(context, message.senderName);
+                  } else {
+                    muteSenderWithFeedback(context, message.senderName);
+                  }
                 },
               ),
             if (canBlockSender)

@@ -5503,4 +5503,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String neighbors_noGpsToast(String name) {
     return '$name can\'t be shown on the map because it has no GPS coordinates.';
   }
+
+  @override
+  String get mute_action => 'Mute contact';
+
+  @override
+  String get mute_unmuteContact => 'Unmute contact';
+
+  @override
+  String mute_actionNamed(String name) {
+    return 'Mute $name';
+  }
+
+  @override
+  String mute_unmuteNamed(String name) {
+    return 'Unmute $name';
+  }
+
+  @override
+  String mute_snackMuted(String name) {
+    return '$name muted';
+  }
+
+  @override
+  String mute_snackUnmuted(String name) {
+    return '$name unmuted';
+  }
+
+  @override
+  String get mute_tag => 'Muted';
+
+  @override
+  String get mute_unmute => 'Unmute';
+
+  @override
+  String get mute_settingsTitle => 'Muted contacts';
+
+  @override
+  String get mute_settingsSubtitle =>
+      'Messages arrive, but with no notification or sound';
+
+  @override
+  String get mute_settingsEmpty => 'No muted contacts';
+
+  @override
+  String get mute_settingsByName => 'Muted by name';
 }

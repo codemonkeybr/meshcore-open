@@ -317,6 +317,39 @@ class AppSettingsService extends ChangeNotifier {
     await updateSettings(_settings.copyWith(blockedNames: updated));
   }
 
+  /// Muted senders still deliver messages but never notify or play a sound.
+  bool isContactMuted(String publicKeyHex) {
+    return _settings.mutedContacts.contains(publicKeyHex.toLowerCase());
+  }
+
+  Future<void> muteContact(String publicKeyHex) async {
+    final updated = Set<String>.from(_settings.mutedContacts)
+      ..add(publicKeyHex.toLowerCase());
+    await updateSettings(_settings.copyWith(mutedContacts: updated));
+  }
+
+  Future<void> unmuteContact(String publicKeyHex) async {
+    final updated = Set<String>.from(_settings.mutedContacts)
+      ..remove(publicKeyHex.toLowerCase());
+    await updateSettings(_settings.copyWith(mutedContacts: updated));
+  }
+
+  /// Channel messages carry only a display name, so senders can also be muted
+  /// by name. Matching is exact and case-sensitive.
+  bool isNameMuted(String name) {
+    return _settings.mutedNames.contains(name);
+  }
+
+  Future<void> muteName(String name) async {
+    final updated = Set<String>.from(_settings.mutedNames)..add(name);
+    await updateSettings(_settings.copyWith(mutedNames: updated));
+  }
+
+  Future<void> unmuteName(String name) async {
+    final updated = Set<String>.from(_settings.mutedNames)..remove(name);
+    await updateSettings(_settings.copyWith(mutedNames: updated));
+  }
+
   Future<void> setTcpServerAddress(String value) async {
     await updateSettings(_settings.copyWith(tcpServerAddress: value));
   }

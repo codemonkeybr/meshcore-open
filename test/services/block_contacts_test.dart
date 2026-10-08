@@ -80,4 +80,45 @@ void main() {
       expect(service.settings.blockedContacts, {'aabb'});
     });
   });
+  muteTests();
+}
+
+void muteTests() {
+  group('muted contacts and names', () {
+    test('settings default to empty and round-trip', () {
+      expect(AppSettings().mutedContacts, isEmpty);
+      expect(AppSettings().mutedNames, isEmpty);
+      final restored = AppSettings.fromJson(
+        AppSettings(
+          mutedContacts: {'AABB'},
+          mutedNames: {'Bruno', 'bruno'},
+        ).toJson(),
+      );
+      expect(restored.mutedContacts, {'aabb'});
+      expect(restored.mutedNames, {'Bruno', 'bruno'});
+      expect(AppSettings.fromJson(const {}).mutedContacts, isEmpty);
+    });
+
+    test('service mutes and unmutes by key and exact name', () async {
+      final service = AppSettingsService();
+      await service.muteContact('AABB');
+      expect(service.isContactMuted('aabb'), isTrue);
+      await service.unmuteContact('AABB');
+      expect(service.isContactMuted('aabb'), isFalse);
+
+      await service.muteName('Bruno');
+      expect(service.isNameMuted('Bruno'), isTrue);
+      expect(service.isNameMuted('bruno'), isFalse);
+      await service.unmuteName('Bruno');
+      expect(service.isNameMuted('Bruno'), isFalse);
+    });
+
+    test('muting does not block', () async {
+      final service = AppSettingsService();
+      await service.muteContact('aabb');
+      await service.muteName('Bruno');
+      expect(service.isContactBlocked('aabb'), isFalse);
+      expect(service.isNameBlocked('Bruno'), isFalse);
+    });
+  });
 }

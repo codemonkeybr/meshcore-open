@@ -22,6 +22,7 @@ import '../widgets/sync_progress_overlay.dart';
 import '../helpers/snack_bar_builder.dart';
 import 'blocked_contacts_screen.dart';
 import 'map_cache_screen.dart';
+import 'muted_contacts_screen.dart';
 
 class AppSettingsScreen extends StatelessWidget {
   /// Scrolls the image-message settings into view once, on first build.
@@ -79,6 +80,27 @@ class AppSettingsScreen extends StatelessWidget {
                           child: _buildNotificationsContent(
                             context,
                             settingsService,
+                          ),
+                        ),
+
+                        // MUTED CONTACTS
+                        SectionHeader(context.l10n.mute_settingsTitle),
+                        MeshCard(
+                          padding: EdgeInsets.zero,
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.notifications_off_outlined,
+                            ),
+                            title: Text(context.l10n.mute_settingsTitle),
+                            subtitle: Text(context.l10n.mute_settingsSubtitle),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MutedContactsScreen(),
+                              ),
+                            ),
                           ),
                         ),
 

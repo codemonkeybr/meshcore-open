@@ -3212,5 +3212,45 @@
         "type": "String"
       }
     }
-  }
+  },
+  "mute_action": "Mute contact",
+  "mute_unmuteContact": "Unmute contact",
+  "mute_actionNamed": "Mute {name}",
+  "@mute_actionNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mute_unmuteNamed": "Unmute {name}",
+  "@mute_unmuteNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mute_snackMuted": "{name} muted",
+  "@mute_snackMuted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mute_snackUnmuted": "{name} unmuted",
+  "@mute_snackUnmuted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mute_tag": "Muted",
+  "mute_unmute": "Unmute",
+  "mute_settingsTitle": "Muted contacts",
+  "mute_settingsSubtitle": "Messages arrive, but with no notification or sound",
+  "mute_settingsEmpty": "No muted contacts",
+  "mute_settingsByName": "Muted by name"
 }
