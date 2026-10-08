@@ -329,67 +329,71 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                   ),
-                  PopupMenuItem(
-                    value:
-                        context.read<AppSettingsService>().isContactMuted(
-                          contact.publicKeyHex,
-                        )
-                        ? 'unmute'
-                        : 'mute',
-                    child: Row(
-                      children: [
-                        Icon(
-                          context.read<AppSettingsService>().isContactMuted(
-                                contact.publicKeyHex,
-                              )
-                              ? Icons.notifications_active_outlined
-                              : Icons.notifications_off_outlined,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          context.read<AppSettingsService>().isContactMuted(
-                                contact.publicKeyHex,
-                              )
-                              ? context.l10n.mute_unmuteContact
-                              : context.l10n.mute_action,
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (context.read<AppSettingsService>().isContactBlocked(
-                    contact.publicKeyHex,
-                  ))
+                  // Muting and blocking are for people only, never for repeaters
+                  // or rooms.
+                  if (contact.type == advTypeChat) ...[
                     PopupMenuItem(
-                      value: 'unblock',
-                      child: Row(
-                        children: [
-                          const Icon(Icons.check_circle_outline, size: 20),
-                          const SizedBox(width: 12),
-                          Text(context.l10n.block_unblockContact),
-                        ],
-                      ),
-                    )
-                  else
-                    PopupMenuItem(
-                      value: 'block',
+                      value:
+                          context.read<AppSettingsService>().isContactMuted(
+                            contact.publicKeyHex,
+                          )
+                          ? 'unmute'
+                          : 'mute',
                       child: Row(
                         children: [
                           Icon(
-                            Icons.block,
+                            context.read<AppSettingsService>().isContactMuted(
+                                  contact.publicKeyHex,
+                                )
+                                ? Icons.notifications_active_outlined
+                                : Icons.notifications_off_outlined,
                             size: 20,
-                            color: Theme.of(context).colorScheme.error,
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            context.l10n.block_action,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
+                            context.read<AppSettingsService>().isContactMuted(
+                                  contact.publicKeyHex,
+                                )
+                                ? context.l10n.mute_unmuteContact
+                                : context.l10n.mute_action,
                           ),
                         ],
                       ),
                     ),
+                    if (context.read<AppSettingsService>().isContactBlocked(
+                      contact.publicKeyHex,
+                    ))
+                      PopupMenuItem(
+                        value: 'unblock',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle_outline, size: 20),
+                            const SizedBox(width: 12),
+                            Text(context.l10n.block_unblockContact),
+                          ],
+                        ),
+                      )
+                    else
+                      PopupMenuItem(
+                        value: 'block',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.block,
+                              size: 20,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              context.l10n.block_action,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                   PopupMenuItem(
                     value: 'clearChat',
                     child: Row(
