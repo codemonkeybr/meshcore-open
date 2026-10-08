@@ -1694,6 +1694,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get chat_reply => 'Antworten';
 
   @override
+  String get chat_ack => 'Ack';
+
+  @override
   String get chat_addReaction => 'Reaktion hinzufügen';
 
   @override

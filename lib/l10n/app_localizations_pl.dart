@@ -1707,6 +1707,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get chat_reply => 'Odpowiedz';
 
   @override
+  String get chat_ack => 'Ack';
+
+  @override
   String get chat_addReaction => 'Dodaj Reakcję';
 
   @override

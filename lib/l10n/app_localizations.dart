@@ -3040,6 +3040,12 @@ abstract class AppLocalizations {
   /// **'Reply'**
   String get chat_reply;
 
+  /// No description provided for @chat_ack.
+  ///
+  /// In en, this message translates to:
+  /// **'Ack'**
+  String get chat_ack;
+
   /// No description provided for @chat_addReaction.
   ///
   /// In en, this message translates to:
