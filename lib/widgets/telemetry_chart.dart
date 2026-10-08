@@ -34,6 +34,12 @@ class TelemetryChart extends StatelessWidget {
   final double? maxY;
   final double minSpan;
 
+  /// Never draw below zero (counters).
+  final bool nonNegative;
+
+  /// Put the value-axis ticks on whole numbers (counters, dBm).
+  final bool integers;
+
   /// Left and right edges of the time axis.
   final DateTime start;
   final DateTime end;
@@ -49,25 +55,85 @@ class TelemetryChart extends StatelessWidget {
     this.minY,
     this.maxY,
     this.minSpan = 1,
-    this.height = 130,
+    this.nonNegative = false,
+    this.integers = false,
+    this.height = 140,
   });
 
   static const int _dotLimit = 40;
 
-  (double, double) _range() {
-    if (minY != null && maxY != null) return (minY!, maxY!);
-    final values = [
-      for (final s in series)
-        for (final p in s.points) p.value,
-    ];
-    if (values.isEmpty) return (0, minSpan);
-    var lo = values.reduce(math.min);
-    var hi = values.reduce(math.max);
-    var pad = (hi - lo) * 0.1;
-    if (hi - lo + 2 * pad < minSpan) pad = (minSpan - (hi - lo)) / 2;
-    lo -= pad;
-    hi += pad;
-    return (minY ?? lo, maxY ?? hi);
+  /// The value range and tick step: padded around the data (or the fixed
+  /// range), then widened to whole multiples of a "nice" step (1, 2, 2.5, 5 x
+  /// 10^n) so every tick label is a round number and none overlap.
+  (double, double, double) _scale() {
+    double lo;
+    double hi;
+    if (minY != null && maxY != null) {
+      lo = minY!;
+      hi = maxY!;
+    } else {
+      final values = [
+        for (final s in series)
+          for (final p in s.points) p.value,
+      ];
+      if (values.isEmpty) {
+        lo = 0;
+        hi = minSpan;
+      } else {
+        lo = values.reduce(math.min);
+        hi = values.reduce(math.max);
+        var pad = (hi - lo) * 0.1;
+        if (hi - lo + 2 * pad < minSpan) pad = (minSpan - (hi - lo)) / 2;
+        lo = minY ?? lo - pad;
+        hi = maxY ?? hi + pad;
+      }
+    }
+    if (nonNegative && lo < 0) lo = 0;
+    if (hi - lo < 1e-9) hi = lo + math.max(minSpan, 1);
+
+    var step = _niceStep((hi - lo) / 3);
+    if (integers && step < 1) step = 1;
+    final niceLo = (lo / step).floorToDouble() * step;
+    var niceHi = (hi / step).ceilToDouble() * step;
+    if (niceHi <= niceLo) niceHi = niceLo + step;
+    return (nonNegative && niceLo < 0 ? 0 : niceLo, niceHi, step);
+  }
+
+  static double _niceStep(double raw) {
+    if (raw <= 0 || raw.isNaN || raw.isInfinite) return 1;
+    final exponent = (math.log(raw) / math.ln10).floor();
+    final base = math.pow(10, exponent).toDouble();
+    final fraction = raw / base;
+    final nice = fraction <= 1
+        ? 1
+        : fraction <= 2
+        ? 2
+        : fraction <= 2.5
+        ? 2.5
+        : fraction <= 5
+        ? 5
+        : 10;
+    return nice * base;
+  }
+
+  /// Short axis label: `1234` -> `1.2k`, `2500000` -> `2.5M`, and only as
+  /// many decimals as the tick step needs.
+  @visibleForTesting
+  static String axisLabel(double value, double step) {
+    final abs = value.abs();
+    String trim(double v, int d) {
+      final text = v.toStringAsFixed(d);
+      return text.contains('.')
+          ? text.replaceFirst(RegExp(r'\.?0+$'), '')
+          : text;
+    }
+
+    if (abs >= 1e6) return '${trim(value / 1e6, 1)}M';
+    if (abs >= 1e4 || (abs >= 1e3 && step >= 100)) {
+      return '${trim(value / 1e3, 1)}k';
+    }
+    final decimals = step >= 1 ? 0 : (step >= 0.1 ? 1 : 2);
+    return value.toStringAsFixed(decimals);
   }
 
   double _x(DateTime t) =>
@@ -81,9 +147,8 @@ class TelemetryChart extends StatelessWidget {
     final tooltipFormat = DateFormat.MMMd(locale).add_Hm();
     final axisStyle = TextStyle(fontSize: 10, color: scheme.onSurfaceVariant);
 
-    final (lo, hi) = _range();
+    final (lo, hi, yInterval) = _scale();
     final spanDays = math.max(_x(end), 0.01);
-    final yInterval = (hi - lo) / 3;
 
     String fmt(double v) => v.toStringAsFixed(decimals);
 
@@ -113,11 +178,16 @@ class TelemetryChart extends StatelessWidget {
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 40,
+                reservedSize: 44,
                 interval: yInterval,
                 getTitlesWidget: (value, meta) => SideTitleWidget(
                   meta: meta,
-                  child: Text(fmt(value), style: axisStyle),
+                  child: Text(
+                    axisLabel(value, yInterval),
+                    style: axisStyle,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
                 ),
               ),
             ),
