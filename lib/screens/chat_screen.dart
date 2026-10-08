@@ -12,6 +12,7 @@ import '../utils/platform_info.dart';
 
 import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
+import '../helpers/ack_text.dart';
 import '../helpers/cyr2lat.dart';
 import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
@@ -1177,6 +1178,20 @@ class _ChatScreenState extends State<ChatScreen> {
                   ? '${message.text.characters.take(40)}…'
                   : message.text,
             ),
+            if (!message.isOutgoing)
+              ListTile(
+                leading: const Icon(Icons.network_check),
+                title: Text(context.l10n.chat_ack),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  // Direct messages carry SNR but no RSSI or route.
+                  insertAtCursor(
+                    _textController,
+                    buildAckText(snr: message.snr),
+                  );
+                  _textFieldFocusNode.requestFocus();
+                },
+              ),
             // Can't react to your own messages
             if (!message.isOutgoing)
               ListTile(

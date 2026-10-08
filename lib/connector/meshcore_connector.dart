@@ -5962,11 +5962,10 @@ class MeshCoreConnector extends ChangeNotifier {
 
       // Companion radio layout:
       // [code][snr?][res?][res?][prefix x6][path_len][txt_type][timestamp x4][extra?][text...]
-      // double snr = 0;
+      double? snr;
       if (code == respCodeContactMsgRecvV3) {
-        // Older firmware layout with SNR as a signed byte after the code
-        // snr = reader.readInt8().toDouble() * 4; // SNR in dB, scaled by 4
-        reader.skipBytes(1); // Skip SNR byte
+        // SNR is a signed byte after the code, scaled by 4 (dB)
+        snr = reader.readInt8() / 4.0;
         reader.skipBytes(2); // Skip reserved bytes
       }
 
@@ -6032,6 +6031,7 @@ class MeshCoreConnector extends ChangeNotifier {
         status: MessageStatus.delivered,
         pathLength: pathLength == 0xFF ? null : (pathLength & 0x3F),
         pathBytes: Uint8List(0),
+        snr: snr,
         fourByteRoomContactKey: roomAuthorPrefix,
       );
     } catch (e) {
@@ -6305,7 +6305,9 @@ class MeshCoreConnector extends ChangeNotifier {
     if (frame.length < 4) return;
     try {
       final reader = BufferReader(frame);
-      reader.skipBytes(3); // Skip header
+      reader.skipBytes(1); // Skip frame type byte
+      final rxSnr = reader.readInt8() / 4.0; // SNR in dB, scaled by 4
+      final rxRssi = reader.readInt8(); // RSSI in dBm
 
       final raw = reader.readRemainingBytes();
       final packet = _parseRawPacket(raw);
@@ -6360,6 +6362,8 @@ class MeshCoreConnector extends ChangeNotifier {
             pathLength: packet.isFlood ? packet.hopCount : 0,
             pathHashWidth: packet.pathHashWidth,
             pathBytes: packet.pathBytes,
+            snr: rxSnr,
+            rssi: rxRssi,
             channelIndex: channel.index,
             region: _resolveTransportRegion(packet),
             packetHash: pktHash,
@@ -7145,6 +7149,8 @@ class MeshCoreConnector extends ChangeNotifier {
           pathHashWidth: message.pathHashWidth,
           pathBytes: message.pathBytes,
           pathVariants: message.pathVariants,
+          snr: message.snr,
+          rssi: message.rssi,
           channelIndex: message.channelIndex,
           region: message.region,
           messageId: message.messageId,
@@ -7189,6 +7195,8 @@ class MeshCoreConnector extends ChangeNotifier {
         pathHashWidth: existing.pathHashWidth ?? processedMessage.pathHashWidth,
         pathBytes: mergedPathBytes,
         pathVariants: mergedPathVariants,
+        snr: existing.snr ?? processedMessage.snr,
+        rssi: existing.rssi ?? processedMessage.rssi,
         region: existing.region ?? processedMessage.region,
         packetHash: existing.packetHash ?? processedMessage.packetHash,
         // Mark as sent when first repeat is heard

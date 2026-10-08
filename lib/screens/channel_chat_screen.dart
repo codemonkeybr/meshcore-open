@@ -20,6 +20,7 @@ import '../helpers/gif_helper.dart';
 import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
 import '../helpers/reaction_helper.dart';
+import '../helpers/ack_text.dart';
 import '../helpers/snack_bar_builder.dart';
 import '../l10n/l10n.dart';
 import '../models/channel.dart';
@@ -2366,6 +2367,15 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                 _setReplyingTo(message);
               },
             ),
+            if (!message.isOutgoing)
+              ListTile(
+                leading: const Icon(Icons.network_check),
+                title: Text(context.l10n.chat_ack),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _insertAck(message);
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.route),
               title: Text(context.l10n.chat_path),
@@ -2453,6 +2463,24 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
         ),
       ),
     );
+  }
+
+  /// Drops a pre-written ack (link quality + route of [message]) into the
+  /// composer for review. It is never sent automatically.
+  void _insertAck(ChannelMessage message) {
+    final pathLength = message.pathLength;
+    insertAtCursor(
+      _textController,
+      buildAckText(
+        senderName: message.senderName,
+        snr: message.snr,
+        rssi: message.rssi,
+        hops: pathLength == null ? null : (pathLength < 0 ? -1 : pathLength),
+        pathBytes: message.pathBytes,
+        hashWidth: message.pathHashWidth ?? 1,
+      ),
+    );
+    _textFieldFocusNode.requestFocus();
   }
 
   void _showEmojiPicker(ChannelMessage message) {

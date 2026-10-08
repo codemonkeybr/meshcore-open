@@ -1681,6 +1681,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get chat_reply => 'Odpovedať';
 
   @override
+  String get chat_ack => 'Ack';
+
+  @override
   String get chat_addReaction => 'Pridať Reakciu';
 
   @override

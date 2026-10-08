@@ -106,6 +106,7 @@ class MessageStore {
       'deliveredAt': msg.deliveredAt?.millisecondsSinceEpoch,
       'tripTimeMs': msg.tripTimeMs,
       'pathLength': msg.pathLength,
+      'snr': msg.snr,
       'pathBytes': msg.pathBytes.isNotEmpty
           ? base64Encode(msg.pathBytes)
           : null,
@@ -181,6 +182,7 @@ class MessageStore {
       tripTimeMs: json['tripTimeMs'] as int?,
       pathLength: decodedPathLength,
       pathBytes: decodedPathBytes,
+      snr: (json['snr'] as num?)?.toDouble(),
       reactions:
           (json['reactions'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(

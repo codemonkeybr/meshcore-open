@@ -44,6 +44,8 @@ class ChannelMessage {
   final int? pathHashWidth;
   final Uint8List pathBytes;
   final List<Uint8List> pathVariants;
+  final double? snr;
+  final int? rssi;
   final int? channelIndex;
   final String? region;
   final String messageId;
@@ -71,6 +73,8 @@ class ChannelMessage {
     this.pathHashWidth,
     Uint8List? pathBytes,
     List<Uint8List>? pathVariants,
+    this.snr,
+    this.rssi,
     this.channelIndex,
     this.region,
     String? messageId,
@@ -100,6 +104,8 @@ class ChannelMessage {
     int? pathHashWidth,
     Uint8List? pathBytes,
     List<Uint8List>? pathVariants,
+    double? snr,
+    int? rssi,
     Object? region = _unset,
     String? packetHash,
     String? replyToMessageId,
@@ -138,6 +144,8 @@ class ChannelMessage {
       pathHashWidth: pathHashWidth ?? this.pathHashWidth,
       pathBytes: pathBytes ?? this.pathBytes,
       pathVariants: pathVariants ?? this.pathVariants,
+      snr: snr ?? this.snr,
+      rssi: rssi ?? this.rssi,
       channelIndex: channelIndex,
       region: region == _unset ? this.region : region as String?,
       messageId: messageId,
@@ -162,12 +170,13 @@ class ChannelMessage {
       }
 
       int? pathLen;
+      double? snr;
       int txtType;
       int? packetPathHashWidth;
       Uint8List pathBytes = Uint8List(0);
       int channelIdx;
       if (code == respCodeChannelMsgRecvV3) {
-        reader.skipBytes(1); // Skip SNR
+        snr = reader.readInt8() / 4.0; // SNR in dB, scaled by 4
         final flags = reader.readByte();
         final hasPath = (flags & 0x01) != 0;
         reader.skipBytes(1); // Skip reserved byte
@@ -230,6 +239,7 @@ class ChannelMessage {
         pathLength: pathLen,
         pathHashWidth: packetPathHashWidth,
         pathBytes: pathBytes,
+        snr: snr,
         channelIndex: channelIdx,
       );
     } catch (e) {

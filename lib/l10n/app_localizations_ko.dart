@@ -1616,6 +1616,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chat_reply => '답변';
 
   @override
+  String get chat_ack => 'Ack';
+
+  @override
   String get chat_addReaction => '댓글 추가';
 
   @override
