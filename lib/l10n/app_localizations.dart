@@ -9382,6 +9382,12 @@ abstract class AppLocalizations {
   /// **'Unblock to send a message'**
   String get block_composeDisabled;
 
+  /// No description provided for @block_sectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked / Muted contacts'**
+  String get block_sectionTitle;
+
   /// No description provided for @block_settingsTitle.
   ///
   /// In en, this message translates to:

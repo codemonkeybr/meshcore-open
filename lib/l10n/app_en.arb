@@ -3170,6 +3170,7 @@
     }
   },
   "block_composeDisabled": "Unblock to send a message",
+  "block_sectionTitle": "Blocked / Muted contacts",
   "block_settingsTitle": "Blocked contacts",
   "block_settingsSubtitle": "Hide and discard messages from specific contacts",
   "block_settingsEmpty": "No blocked contacts",

@@ -83,27 +83,6 @@ class AppSettingsScreen extends StatelessWidget {
                           ),
                         ),
 
-                        // MUTED CONTACTS
-                        SectionHeader(context.l10n.mute_settingsTitle),
-                        MeshCard(
-                          padding: EdgeInsets.zero,
-                          child: ListTile(
-                            leading: const Icon(
-                              Icons.notifications_off_outlined,
-                            ),
-                            title: Text(context.l10n.mute_settingsTitle),
-                            subtitle: Text(context.l10n.mute_settingsSubtitle),
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const MutedContactsScreen(),
-                              ),
-                            ),
-                          ),
-                        ),
-
                         // MESSAGING
                         SectionHeader(context.l10n.appSettings_messaging),
                         MeshCard(
@@ -114,22 +93,46 @@ class AppSettingsScreen extends StatelessWidget {
                           ),
                         ),
 
-                        // BLOCKED CONTACTS
-                        SectionHeader(context.l10n.block_settingsTitle),
+                        // BLOCKED / MUTED CONTACTS
+                        SectionHeader(context.l10n.block_sectionTitle),
                         MeshCard(
                           padding: EdgeInsets.zero,
-                          child: ListTile(
-                            leading: const Icon(Icons.block),
-                            title: Text(context.l10n.block_settingsTitle),
-                            subtitle: Text(context.l10n.block_settingsSubtitle),
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const BlockedContactsScreen(),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.block),
+                                title: Text(context.l10n.block_settingsTitle),
+                                subtitle: Text(
+                                  context.l10n.block_settingsSubtitle,
+                                ),
+                                trailing: const Icon(Icons.chevron_right),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const BlockedContactsScreen(),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const Divider(height: 1, indent: 16),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.notifications_off_outlined,
+                                ),
+                                title: Text(context.l10n.mute_settingsTitle),
+                                subtitle: Text(
+                                  context.l10n.mute_settingsSubtitle,
+                                ),
+                                trailing: const Icon(Icons.chevron_right),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MutedContactsScreen(),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
 

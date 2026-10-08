@@ -5273,6 +5273,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get block_composeDisabled => 'Unblock to send a message';
 
   @override
+  String get block_sectionTitle => 'Blocked / Muted contacts';
+
+  @override
   String get block_settingsTitle => 'Blocked contacts';
 
   @override
