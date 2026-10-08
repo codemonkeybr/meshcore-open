@@ -8,12 +8,15 @@ import '../models/contact.dart';
 import '../models/path_selection.dart';
 import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
+import '../models/telemetry_history.dart';
 import '../services/repeater_command_service.dart';
+import '../services/telemetry_history_service.dart';
 import '../theme/mesh_theme.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/mesh_ui.dart';
 import '../widgets/neighbors_map.dart';
 import '../widgets/routing_sheet.dart';
+import '../helpers/neighbors_protocol.dart';
 import '../helpers/snack_bar_builder.dart';
 
 class NeighborsScreen extends StatefulWidget {
@@ -31,9 +34,6 @@ class NeighborsScreen extends StatefulWidget {
 }
 
 class _NeighborsScreenState extends State<NeighborsScreen> {
-  static const int _reqNeighborsKeyLen = 4;
-  // Firmware packs results into a 130-byte buffer (simple_repeater/MyMesh.cpp).
-  static const int _reqNeighborsPageSize = 130 ~/ (_reqNeighborsKeyLen + 5);
   static const int _statusPayloadOffset = 8;
   static const int _statusStatsSize = 52;
   static const int _statusResponseBytes =
@@ -121,43 +121,12 @@ class _NeighborsScreenState extends State<NeighborsScreen> {
     return '${h}h ${m2}m';
   }
 
-  static List<Map<String, dynamic>> parseNeighborsData(
-    BufferReader buffer,
-    int resultsCount,
-  ) {
-    final Map<int, Map<String, dynamic>> neighbors = {};
-    try {
-      for (var i = 0; i < resultsCount; i++) {
-        final neighborData = neighbors.putIfAbsent(
-          i,
-          () => {
-            'contact': null,
-            'publicKey': <Uint8List>{},
-            'lastHeard': <int>{},
-            'snr': <double>{},
-          },
-        );
-        neighborData['publicKey'] = buffer.readBytes(_reqNeighborsKeyLen);
-        neighborData['lastHeard'] = buffer.readUInt32LE();
-        neighborData['snr'] = buffer.readInt8() / 4.0;
-      }
-
-      return neighbors.values.toList();
-    } catch (e) {
-      appLogger.error(
-        'Error parsing neighbors data: $e',
-        tag: 'NeighborsScreen',
-      );
-      return [];
-    }
-  }
-
   void _handleNeighborsResponse(MeshCoreConnector connector, Uint8List frame) {
-    final buffer = BufferReader(frame);
     final contacts = connector.allContactsUnfiltered;
     try {
-      final neighborCount = buffer.readUInt16LE();
-      final page = parseNeighborsData(buffer, buffer.readUInt16LE());
+      final parsedPage = NeighborsProtocol.parsePage(frame);
+      final neighborCount = parsedPage.total;
+      final page = parsedPage.page;
       final parsedNeighbors = [
         if (_pageOffset > 0) ...?_parsedNeighbors,
         ...page,
@@ -166,7 +135,7 @@ class _NeighborsScreenState extends State<NeighborsScreen> {
         for (var neighborData in parsedNeighbors) {
           final publicKey = neighborData['publicKey'];
           if (listEquals(
-            repeater.publicKey.sublist(0, _reqNeighborsKeyLen),
+            repeater.publicKey.sublist(0, NeighborsProtocol.keyLength),
             publicKey,
           )) {
             neighborData['contact'] = repeater;
@@ -187,6 +156,19 @@ class _NeighborsScreenState extends State<NeighborsScreen> {
         _loadNeighbors(offset: parsedNeighbors.length);
         return;
       }
+      unawaited(
+        context.read<TelemetryHistoryService>().recordNeighbors(
+          TelemetryHistoryService.keyOf(connector.selfPublicKeyHex),
+          TelemetryHistoryService.keyOf(widget.repeater.publicKeyHex),
+          [
+            for (final n in parsedNeighbors)
+              NeighborReading(
+                prefixHex: pubKeyToHex(n['publicKey'] as Uint8List),
+                snr: n['snr'] as double,
+              ),
+          ],
+        ),
+      );
       showDismissibleSnackBar(
         context,
         content: Text(context.l10n.neighbors_receivedData),
@@ -216,18 +198,9 @@ class _NeighborsScreenState extends State<NeighborsScreen> {
       final selection = await connector.preparePathForContactSend(repeater);
       _pendingStatusSelection = selection;
 
-      //[version][number of requested neighbors][offset_16bit][order by][len of public key]
       final frame = buildSendBinaryReq(
         repeater.publicKey,
-        payload: Uint8List.fromList([
-          reqTypeGetNeighbors,
-          0x00,
-          _reqNeighborsPageSize,
-          offset & 0xFF,
-          (offset >> 8) & 0xFF,
-          0x00,
-          _reqNeighborsKeyLen,
-        ]),
+        payload: NeighborsProtocol.requestPayload(offset),
       );
       _awaitingSent = true;
       await connector.sendFrame(frame);

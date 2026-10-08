@@ -85,6 +85,7 @@ dependencies:
   # ~56 MB for ORT instead of ~18 MB.
   flutter_onnxruntime: ^1.8.3
   base32: ^2.2.0
+  fl_chart: ^1.2.0
 
 hooks:
   user_defines:

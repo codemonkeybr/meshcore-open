@@ -42,6 +42,7 @@ import 'contact_qr_scanner_screen.dart';
 import 'discovery_screen.dart';
 import 'map_screen.dart';
 import 'repeater_hub_screen.dart';
+import 'telemetry_history_screen.dart';
 import 'settings_screen.dart';
 
 enum RoomLoginDestination { chat, management }
@@ -1569,6 +1570,21 @@ class _ContactsScreenState extends State<ContactsScreen>
                   },
                 ),
             ],
+            if (isRepeater || isRoom)
+              ListTile(
+                leading: Icon(Icons.history, color: MeshPalette.blue),
+                title: Text(context.l10n.history_contactMenu),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          TelemetryHistoryScreen(contact: contact),
+                    ),
+                  );
+                },
+              ),
             ListTile(
               leading: Icon(
                 isFavorite ? Icons.star : Icons.star_border,

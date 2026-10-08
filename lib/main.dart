@@ -13,6 +13,8 @@ import 'utils/platform_info.dart';
 import 'connector/meshcore_connector.dart';
 import 'models/image_codec_support.dart';
 import 'screens/scanner_screen.dart';
+import 'services/telemetry_history_service.dart';
+import 'storage/telemetry_history_store_factory.dart';
 import 'services/image_chunk_transport.dart';
 import 'services/image_codec_service.dart';
 import 'services/image_codec_settings_store.dart';
@@ -406,6 +408,9 @@ class _MeshCoreAppState extends State<MeshCoreApp> with WidgetsBindingObserver {
         ChangeNotifierProvider.value(value: widget.timeoutPredictionService),
         ChangeNotifierProvider.value(value: widget.imageCodecService),
         ChangeNotifierProvider.value(value: widget.receivedImageStore),
+        ChangeNotifierProvider(
+          create: (_) => TelemetryHistoryService(createTelemetryHistoryStore()),
+        ),
       ],
       child: Consumer<AppSettingsService>(
         builder: (context, settingsService, child) {

@@ -5640,4 +5640,146 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mute_settingsByName => 'Muted by name';
+
+  @override
+  String get history_title => 'Telemetry history';
+
+  @override
+  String get history_hubTitle => 'History';
+
+  @override
+  String get history_hubSubtitle => 'Charts over days and months';
+
+  @override
+  String get history_contactMenu => 'Telemetry history';
+
+  @override
+  String get history_refresh => 'Get new readings';
+
+  @override
+  String get history_refreshNeedsConnection =>
+      'Connect your radio to get new readings';
+
+  @override
+  String get history_clear => 'Clear history';
+
+  @override
+  String get history_clearConfirmTitle => 'Clear history?';
+
+  @override
+  String get history_rangeWeek => '1W';
+
+  @override
+  String get history_rangeMonth => '1M';
+
+  @override
+  String get history_range3Months => '3M';
+
+  @override
+  String get history_rangeAll => 'All';
+
+  @override
+  String get history_sectionRadio => 'Radio';
+
+  @override
+  String get history_sectionNeighbors => 'Neighbors';
+
+  @override
+  String get history_sectionSensors => 'Sensors';
+
+  @override
+  String get history_chartBattery => 'Battery';
+
+  @override
+  String get history_chartSnr => 'SNR';
+
+  @override
+  String get history_chartRssi => 'RSSI';
+
+  @override
+  String get history_chartNoise => 'Noise floor';
+
+  @override
+  String get history_chartSent => 'Packets sent';
+
+  @override
+  String get history_chartDuplicates => 'Duplicates';
+
+  @override
+  String get history_chartErrors => 'Errors';
+
+  @override
+  String get history_legendDirect => 'Direct';
+
+  @override
+  String get history_legendFlood => 'Flood';
+
+  @override
+  String get history_noReadingsInRange => 'No readings in this range.';
+
+  @override
+  String get history_footer =>
+      'History older than one year is removed automatically.';
+
+  @override
+  String get history_emptyTitle => 'No history yet';
+
+  @override
+  String get history_emptyBody =>
+      'Open Status, Neighbors or Telemetry for this node while connected, or get readings now. Each visit saves a reading, at most once every 15 minutes.';
+
+  @override
+  String get history_getReadings => 'Get readings now';
+
+  @override
+  String get history_singleReading =>
+      'A reading is saved at most every 15 minutes. Check back after your next visit to see trends.';
+
+  @override
+  String get history_fetchTitle => 'Getting new readings';
+
+  @override
+  String get history_stepLogin => 'Log in';
+
+  @override
+  String get history_stepRadio => 'Radio stats';
+
+  @override
+  String get history_stepNeighbors => 'Neighbors';
+
+  @override
+  String get history_stepSensors => 'Sensors';
+
+  @override
+  String get history_failTitle => 'Couldn\'t get new readings';
+
+  @override
+  String get history_failRejectedSaved =>
+      'The repeater did not accept the saved password.';
+
+  @override
+  String get history_failRejectedGuest =>
+      'This repeater did not accept a guest login, and no password is saved for it. Log in once and the app can remember it.';
+
+  @override
+  String get history_failNoAnswer => 'No answer from the repeater.';
+
+  @override
+  String get history_failNotConnected => 'Connect your radio first.';
+
+  @override
+  String get history_loginButton => 'Log in';
+
+  @override
+  String get history_tryAgain => 'Try again';
+
+  @override
+  String history_clearConfirmBody(String name) {
+    return 'Deletes every saved reading for $name from this phone.';
+  }
+
+  @override
+  String history_sectionNeighborsCount(int count) {
+    return 'Neighbors · $count';
+  }
 }

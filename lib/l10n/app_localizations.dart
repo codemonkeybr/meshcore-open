@@ -9531,6 +9531,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Muted by name'**
   String get mute_settingsByName;
+
+  /// No description provided for @history_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry history'**
+  String get history_title;
+
+  /// No description provided for @history_hubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history_hubTitle;
+
+  /// No description provided for @history_hubSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Charts over days and months'**
+  String get history_hubSubtitle;
+
+  /// No description provided for @history_contactMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry history'**
+  String get history_contactMenu;
+
+  /// No description provided for @history_refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Get new readings'**
+  String get history_refresh;
+
+  /// No description provided for @history_refreshNeedsConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect your radio to get new readings'**
+  String get history_refreshNeedsConnection;
+
+  /// No description provided for @history_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear history'**
+  String get history_clear;
+
+  /// No description provided for @history_clearConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear history?'**
+  String get history_clearConfirmTitle;
+
+  /// No description provided for @history_rangeWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'1W'**
+  String get history_rangeWeek;
+
+  /// No description provided for @history_rangeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'1M'**
+  String get history_rangeMonth;
+
+  /// No description provided for @history_range3Months.
+  ///
+  /// In en, this message translates to:
+  /// **'3M'**
+  String get history_range3Months;
+
+  /// No description provided for @history_rangeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get history_rangeAll;
+
+  /// No description provided for @history_sectionRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get history_sectionRadio;
+
+  /// No description provided for @history_sectionNeighbors.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighbors'**
+  String get history_sectionNeighbors;
+
+  /// No description provided for @history_sectionSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensors'**
+  String get history_sectionSensors;
+
+  /// No description provided for @history_chartBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get history_chartBattery;
+
+  /// No description provided for @history_chartSnr.
+  ///
+  /// In en, this message translates to:
+  /// **'SNR'**
+  String get history_chartSnr;
+
+  /// No description provided for @history_chartRssi.
+  ///
+  /// In en, this message translates to:
+  /// **'RSSI'**
+  String get history_chartRssi;
+
+  /// No description provided for @history_chartNoise.
+  ///
+  /// In en, this message translates to:
+  /// **'Noise floor'**
+  String get history_chartNoise;
+
+  /// No description provided for @history_chartSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Packets sent'**
+  String get history_chartSent;
+
+  /// No description provided for @history_chartDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicates'**
+  String get history_chartDuplicates;
+
+  /// No description provided for @history_chartErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Errors'**
+  String get history_chartErrors;
+
+  /// No description provided for @history_legendDirect.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct'**
+  String get history_legendDirect;
+
+  /// No description provided for @history_legendFlood.
+  ///
+  /// In en, this message translates to:
+  /// **'Flood'**
+  String get history_legendFlood;
+
+  /// No description provided for @history_noReadingsInRange.
+  ///
+  /// In en, this message translates to:
+  /// **'No readings in this range.'**
+  String get history_noReadingsInRange;
+
+  /// No description provided for @history_footer.
+  ///
+  /// In en, this message translates to:
+  /// **'History older than one year is removed automatically.'**
+  String get history_footer;
+
+  /// No description provided for @history_emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get history_emptyTitle;
+
+  /// No description provided for @history_emptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Status, Neighbors or Telemetry for this node while connected, or get readings now. Each visit saves a reading, at most once every 15 minutes.'**
+  String get history_emptyBody;
+
+  /// No description provided for @history_getReadings.
+  ///
+  /// In en, this message translates to:
+  /// **'Get readings now'**
+  String get history_getReadings;
+
+  /// No description provided for @history_singleReading.
+  ///
+  /// In en, this message translates to:
+  /// **'A reading is saved at most every 15 minutes. Check back after your next visit to see trends.'**
+  String get history_singleReading;
+
+  /// No description provided for @history_fetchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting new readings'**
+  String get history_fetchTitle;
+
+  /// No description provided for @history_stepLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get history_stepLogin;
+
+  /// No description provided for @history_stepRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio stats'**
+  String get history_stepRadio;
+
+  /// No description provided for @history_stepNeighbors.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighbors'**
+  String get history_stepNeighbors;
+
+  /// No description provided for @history_stepSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensors'**
+  String get history_stepSensors;
+
+  /// No description provided for @history_failTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t get new readings'**
+  String get history_failTitle;
+
+  /// No description provided for @history_failRejectedSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'The repeater did not accept the saved password.'**
+  String get history_failRejectedSaved;
+
+  /// No description provided for @history_failRejectedGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'This repeater did not accept a guest login, and no password is saved for it. Log in once and the app can remember it.'**
+  String get history_failRejectedGuest;
+
+  /// No description provided for @history_failNoAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer from the repeater.'**
+  String get history_failNoAnswer;
+
+  /// No description provided for @history_failNotConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect your radio first.'**
+  String get history_failNotConnected;
+
+  /// No description provided for @history_loginButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get history_loginButton;
+
+  /// No description provided for @history_tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get history_tryAgain;
+
+  /// No description provided for @history_clearConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes every saved reading for {name} from this phone.'**
+  String history_clearConfirmBody(String name);
+
+  /// No description provided for @history_sectionNeighborsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighbors · {count}'**
+  String history_sectionNeighborsCount(int count);
 }
 
 class _AppLocalizationsDelegate

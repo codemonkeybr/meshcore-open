@@ -3253,5 +3253,63 @@
   "mute_settingsTitle": "Muted contacts",
   "mute_settingsSubtitle": "Messages arrive, but with no notification or sound",
   "mute_settingsEmpty": "No muted contacts",
-  "mute_settingsByName": "Muted by name"
+  "mute_settingsByName": "Muted by name",
+  "history_title": "Telemetry history",
+  "history_hubTitle": "History",
+  "history_hubSubtitle": "Charts over days and months",
+  "history_contactMenu": "Telemetry history",
+  "history_refresh": "Get new readings",
+  "history_refreshNeedsConnection": "Connect your radio to get new readings",
+  "history_clear": "Clear history",
+  "history_clearConfirmTitle": "Clear history?",
+  "history_rangeWeek": "1W",
+  "history_rangeMonth": "1M",
+  "history_range3Months": "3M",
+  "history_rangeAll": "All",
+  "history_sectionRadio": "Radio",
+  "history_sectionNeighbors": "Neighbors",
+  "history_sectionSensors": "Sensors",
+  "history_chartBattery": "Battery",
+  "history_chartSnr": "SNR",
+  "history_chartRssi": "RSSI",
+  "history_chartNoise": "Noise floor",
+  "history_chartSent": "Packets sent",
+  "history_chartDuplicates": "Duplicates",
+  "history_chartErrors": "Errors",
+  "history_legendDirect": "Direct",
+  "history_legendFlood": "Flood",
+  "history_noReadingsInRange": "No readings in this range.",
+  "history_footer": "History older than one year is removed automatically.",
+  "history_emptyTitle": "No history yet",
+  "history_emptyBody": "Open Status, Neighbors or Telemetry for this node while connected, or get readings now. Each visit saves a reading, at most once every 15 minutes.",
+  "history_getReadings": "Get readings now",
+  "history_singleReading": "A reading is saved at most every 15 minutes. Check back after your next visit to see trends.",
+  "history_fetchTitle": "Getting new readings",
+  "history_stepLogin": "Log in",
+  "history_stepRadio": "Radio stats",
+  "history_stepNeighbors": "Neighbors",
+  "history_stepSensors": "Sensors",
+  "history_failTitle": "Couldn't get new readings",
+  "history_failRejectedSaved": "The repeater did not accept the saved password.",
+  "history_failRejectedGuest": "This repeater did not accept a guest login, and no password is saved for it. Log in once and the app can remember it.",
+  "history_failNoAnswer": "No answer from the repeater.",
+  "history_failNotConnected": "Connect your radio first.",
+  "history_loginButton": "Log in",
+  "history_tryAgain": "Try again",
+  "history_clearConfirmBody": "Deletes every saved reading for {name} from this phone.",
+  "@history_clearConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "history_sectionNeighborsCount": "Neighbors \u00b7 {count}",
+  "@history_sectionNeighborsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

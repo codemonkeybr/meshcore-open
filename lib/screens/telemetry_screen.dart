@@ -12,6 +12,7 @@ import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
 import '../services/app_settings_service.dart';
 import '../services/repeater_command_service.dart';
+import '../services/telemetry_history_service.dart';
 import '../utils/app_logger.dart';
 import '../widgets/routing_sheet.dart';
 import '../helpers/cayenne_lpp.dart';
@@ -195,6 +196,16 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
       );
     }
     if (!mounted) return;
+    if (!widget.isSelf && widget.contact.type != advTypeChat) {
+      final connector = Provider.of<MeshCoreConnector>(context, listen: false);
+      unawaited(
+        context.read<TelemetryHistoryService>().recordSensors(
+          TelemetryHistoryService.keyOf(connector.selfPublicKeyHex),
+          TelemetryHistoryService.keyOf(widget.contact.publicKeyHex),
+          TelemetryHistoryService.sensorValuesFromLpp(parsedTelemetry),
+        ),
+      );
+    }
     final isAutoRefreshRequest = _activeTelemetryRequestIsAutoRefresh;
     setState(() {
       _parsedTelemetry = parsedTelemetry;

@@ -11,6 +11,7 @@ import '../connector/meshcore_connector.dart';
 import '../connector/meshcore_protocol.dart';
 import '../services/app_settings_service.dart';
 import '../services/repeater_command_service.dart';
+import '../services/telemetry_history_service.dart';
 import '../theme/mesh_theme.dart';
 import '../utils/battery_utils.dart';
 import '../widgets/mesh_ui.dart';
@@ -158,6 +159,13 @@ class _RepeaterStatusScreenState extends State<RepeaterStatusScreen> {
     });
     final batteryMv = stats.batteryMv;
     final connector = Provider.of<MeshCoreConnector>(context, listen: false);
+    unawaited(
+      context.read<TelemetryHistoryService>().recordRadio(
+        TelemetryHistoryService.keyOf(connector.selfPublicKeyHex),
+        TelemetryHistoryService.keyOf(widget.repeater.publicKeyHex),
+        stats,
+      ),
+    );
     connector.updateRepeaterBatterySnapshot(
       widget.repeater.publicKeyHex,
       batteryMv,
