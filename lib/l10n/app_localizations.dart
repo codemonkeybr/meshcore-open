@@ -9795,6 +9795,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Neighbors · {count}'**
   String history_sectionNeighborsCount(int count);
+
+  /// No description provided for @split_title.
+  ///
+  /// In en, this message translates to:
+  /// **'MeshCore'**
+  String get split_title;
+
+  /// No description provided for @split_sectionChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'Channels'**
+  String get split_sectionChannels;
+
+  /// No description provided for @split_sectionCompanions.
+  ///
+  /// In en, this message translates to:
+  /// **'Companions'**
+  String get split_sectionCompanions;
+
+  /// No description provided for @split_sectionRepeaters.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeaters'**
+  String get split_sectionRepeaters;
+
+  /// No description provided for @split_sectionRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms'**
+  String get split_sectionRooms;
+
+  /// No description provided for @split_searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search channels and contacts...'**
+  String get split_searchHint;
+
+  /// No description provided for @split_noMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches'**
+  String get split_noMatches;
+
+  /// No description provided for @split_emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick something on the left'**
+  String get split_emptyTitle;
+
+  /// No description provided for @split_emptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a channel, companion, repeater or room to open it here.'**
+  String get split_emptyBody;
+
+  /// No description provided for @split_menuMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get split_menuMap;
+
+  /// No description provided for @split_menuDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover contacts'**
+  String get split_menuDiscover;
 }
 
 class _AppLocalizationsDelegate

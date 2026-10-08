@@ -13,6 +13,7 @@ import 'utils/platform_info.dart';
 import 'connector/meshcore_connector.dart';
 import 'models/image_codec_support.dart';
 import 'screens/scanner_screen.dart';
+import 'services/split_view_state.dart';
 import 'services/telemetry_history_service.dart';
 import 'storage/telemetry_history_store_factory.dart';
 import 'services/image_chunk_transport.dart';
@@ -411,6 +412,7 @@ class _MeshCoreAppState extends State<MeshCoreApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(
           create: (_) => TelemetryHistoryService(createTelemetryHistoryStore()),
         ),
+        ChangeNotifierProvider(create: (_) => SplitViewState()),
       ],
       child: Consumer<AppSettingsService>(
         builder: (context, settingsService, child) {
