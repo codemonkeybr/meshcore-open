@@ -5693,4 +5693,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String history_sectionNeighborsCount(int count) {
     return 'Neighbors · $count';
   }
+
+  @override
+  String get split_title => 'MeshCore';
+
+  @override
+  String get split_sectionChannels => 'Channels';
+
+  @override
+  String get split_sectionCompanions => 'Companions';
+
+  @override
+  String get split_sectionRepeaters => 'Repeaters';
+
+  @override
+  String get split_sectionRooms => 'Rooms';
+
+  @override
+  String get split_searchHint => 'Search channels and contacts...';
+
+  @override
+  String get split_noMatches => 'No matches';
+
+  @override
+  String get split_emptyTitle => 'Pick something on the left';
+
+  @override
+  String get split_emptyBody =>
+      'Choose a channel, companion, repeater or room to open it here.';
+
+  @override
+  String get split_menuMap => 'Map';
+
+  @override
+  String get split_menuDiscover => 'Discover contacts';
 }

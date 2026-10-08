@@ -44,6 +44,7 @@ import 'map_screen.dart';
 import 'repeater_hub_screen.dart';
 import 'telemetry_history_screen.dart';
 import 'settings_screen.dart';
+import 'split_view_screen.dart';
 
 enum RoomLoginDestination { chat, management }
 
@@ -352,6 +353,9 @@ class _ContactsScreenState extends State<ContactsScreen>
     if (!checkConnectionAndNavigate(connector)) {
       return const SizedBox.shrink();
     }
+
+    // Unfolded or tablet-wide windows get the two-pane layout.
+    if (isSplitViewWidth(context)) return const SplitViewScreen();
 
     final allowBack = !connector.isConnected;
     return PopScope(

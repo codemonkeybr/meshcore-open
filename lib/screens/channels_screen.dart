@@ -35,6 +35,7 @@ import 'community_qr_scanner_screen.dart';
 import 'contacts_screen.dart';
 import 'map_screen.dart';
 import 'settings_screen.dart';
+import 'split_view_screen.dart';
 
 class ChannelsScreen extends StatefulWidget {
   final bool hideBackButton;
@@ -106,6 +107,9 @@ class _ChannelsScreenState extends State<ChannelsScreen>
     if (!checkConnectionAndNavigate(connector)) {
       return const SizedBox.shrink();
     }
+
+    // Unfolded or tablet-wide windows get the two-pane layout.
+    if (isSplitViewWidth(context)) return const SplitViewScreen();
 
     final allowBack = !connector.isConnected;
 

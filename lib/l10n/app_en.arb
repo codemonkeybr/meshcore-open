@@ -3304,12 +3304,23 @@
       }
     }
   },
-  "history_sectionNeighborsCount": "Neighbors \u00b7 {count}",
+  "history_sectionNeighborsCount": "Neighbors · {count}",
   "@history_sectionNeighborsCount": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
-  }
+  },
+  "split_title": "MeshCore",
+  "split_sectionChannels": "Channels",
+  "split_sectionCompanions": "Companions",
+  "split_sectionRepeaters": "Repeaters",
+  "split_sectionRooms": "Rooms",
+  "split_searchHint": "Search channels and contacts...",
+  "split_noMatches": "No matches",
+  "split_emptyTitle": "Pick something on the left",
+  "split_emptyBody": "Choose a channel, companion, repeater or room to open it here.",
+  "split_menuMap": "Map",
+  "split_menuDiscover": "Discover contacts"
 }
