@@ -313,39 +313,42 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                   ),
-                  if (context.read<AppSettingsService>().isContactBlocked(
-                    contact.publicKeyHex,
-                  ))
-                    PopupMenuItem(
-                      value: 'unblock',
-                      child: Row(
-                        children: [
-                          const Icon(Icons.check_circle_outline, size: 20),
-                          const SizedBox(width: 12),
-                          Text(context.l10n.block_unblockContact),
-                        ],
-                      ),
-                    )
-                  else
-                    PopupMenuItem(
-                      value: 'block',
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.block,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            context.l10n.block_action,
-                            style: TextStyle(
+                  // Blocking is for people only, never for repeaters or rooms.
+                  if (contact.type == advTypeChat) ...[
+                    if (context.read<AppSettingsService>().isContactBlocked(
+                      contact.publicKeyHex,
+                    ))
+                      PopupMenuItem(
+                        value: 'unblock',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle_outline, size: 20),
+                            const SizedBox(width: 12),
+                            Text(context.l10n.block_unblockContact),
+                          ],
+                        ),
+                      )
+                    else
+                      PopupMenuItem(
+                        value: 'block',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.block,
+                              size: 20,
                               color: Theme.of(context).colorScheme.error,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 12),
+                            Text(
+                              context.l10n.block_action,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                  ],
                   PopupMenuItem(
                     value: 'clearChat',
                     child: Row(

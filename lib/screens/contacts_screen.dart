@@ -1580,30 +1580,32 @@ class _ContactsScreenState extends State<ContactsScreen>
                 );
               },
             ),
-            ListTile(
-              leading: Icon(
-                isBlocked ? Icons.check_circle_outline : Icons.block,
-                color: isBlocked
-                    ? MeshPalette.blue
-                    : Theme.of(context).colorScheme.error,
+            // Blocking is for people only, never for repeaters or rooms.
+            if (contact.type == advTypeChat)
+              ListTile(
+                leading: Icon(
+                  isBlocked ? Icons.check_circle_outline : Icons.block,
+                  color: isBlocked
+                      ? MeshPalette.blue
+                      : Theme.of(context).colorScheme.error,
+                ),
+                title: Text(
+                  isBlocked
+                      ? context.l10n.block_unblockContact
+                      : context.l10n.block_action,
+                  style: isBlocked
+                      ? null
+                      : TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  if (isBlocked) {
+                    unblockContactWithFeedback(context, contact);
+                  } else {
+                    confirmAndBlockContact(context, contact);
+                  }
+                },
               ),
-              title: Text(
-                isBlocked
-                    ? context.l10n.block_unblockContact
-                    : context.l10n.block_action,
-                style: isBlocked
-                    ? null
-                    : TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-              onTap: () {
-                Navigator.pop(sheetContext);
-                if (isBlocked) {
-                  unblockContactWithFeedback(context, contact);
-                } else {
-                  confirmAndBlockContact(context, contact);
-                }
-              },
-            ),
             ListTile(
               leading: const Icon(Icons.copy),
               title: Text(context.l10n.contacts_ShareContact),
