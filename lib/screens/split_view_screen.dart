@@ -410,55 +410,63 @@ class _SidebarState extends State<_Sidebar> {
         Expanded(
           child: ListView(
             children: [
-              _SectionHeader(
-                label: context.l10n.split_sectionChannels,
-                expanded: open(SplitSection.channels, channels.length),
-                unread: channelsUnread,
-                total: channels.length,
-                onTap: () => split.toggle(SplitSection.channels),
-              ),
-              if (open(SplitSection.channels, channels.length))
-                for (final channel in channels)
-                  _Row(
-                    selected:
-                        split.selection?.isChannel(channel.index) ?? false,
-                    leading: const Text('#'),
-                    label: splitChannelLabel(channel).replaceFirst('#', ''),
-                    unread: connector.getUnreadCountForChannel(channel),
-                    muted: settings.isChannelMuted(
-                      channel.name.isEmpty
-                          ? 'Channel ${channel.index}'
-                          : channel.name,
+              if (query.trim().isEmpty || channels.isNotEmpty) ...[
+                _SectionHeader(
+                  label: context.l10n.split_sectionChannels,
+                  expanded: open(SplitSection.channels, channels.length),
+                  unread: channelsUnread,
+                  total: channels.length,
+                  onTap: () => split.toggle(SplitSection.channels),
+                ),
+                if (open(SplitSection.channels, channels.length))
+                  for (final channel in channels)
+                    _Row(
+                      selected:
+                          split.selection?.isChannel(channel.index) ?? false,
+                      leading: const Text('#'),
+                      label: splitChannelLabel(channel).replaceFirst('#', ''),
+                      unread: connector.getUnreadCountForChannel(channel),
+                      muted: settings.isChannelMuted(
+                        channel.name.isEmpty
+                            ? 'Channel ${channel.index}'
+                            : channel.name,
+                      ),
+                      onTap: () => widget.onOpenChannel(channel),
                     ),
-                    onTap: () => widget.onOpenChannel(channel),
-                  ),
-              _SectionHeader(
-                label: context.l10n.split_sectionCompanions,
-                expanded: open(SplitSection.companions, companions.length),
-                unread: companionsUnread,
-                total: companions.length,
-                onTap: () => split.toggle(SplitSection.companions),
-              ),
-              if (open(SplitSection.companions, companions.length))
-                for (final c in companions) _contactRow(c, split, connector),
-              _SectionHeader(
-                label: context.l10n.split_sectionRepeaters,
-                expanded: open(SplitSection.repeaters, repeaters.length),
-                unread: 0,
-                total: repeaters.length,
-                onTap: () => split.toggle(SplitSection.repeaters),
-              ),
-              if (open(SplitSection.repeaters, repeaters.length))
-                for (final c in repeaters) _contactRow(c, split, connector),
-              _SectionHeader(
-                label: context.l10n.split_sectionRooms,
-                expanded: open(SplitSection.rooms, rooms.length),
-                unread: roomsUnread,
-                total: rooms.length,
-                onTap: () => split.toggle(SplitSection.rooms),
-              ),
-              if (open(SplitSection.rooms, rooms.length))
-                for (final c in rooms) _contactRow(c, split, connector),
+              ],
+              if (query.trim().isEmpty || companions.isNotEmpty) ...[
+                _SectionHeader(
+                  label: context.l10n.split_sectionCompanions,
+                  expanded: open(SplitSection.companions, companions.length),
+                  unread: companionsUnread,
+                  total: companions.length,
+                  onTap: () => split.toggle(SplitSection.companions),
+                ),
+                if (open(SplitSection.companions, companions.length))
+                  for (final c in companions) _contactRow(c, split, connector),
+              ],
+              if (query.trim().isEmpty || repeaters.isNotEmpty) ...[
+                _SectionHeader(
+                  label: context.l10n.split_sectionRepeaters,
+                  expanded: open(SplitSection.repeaters, repeaters.length),
+                  unread: 0,
+                  total: repeaters.length,
+                  onTap: () => split.toggle(SplitSection.repeaters),
+                ),
+                if (open(SplitSection.repeaters, repeaters.length))
+                  for (final c in repeaters) _contactRow(c, split, connector),
+              ],
+              if (query.trim().isEmpty || rooms.isNotEmpty) ...[
+                _SectionHeader(
+                  label: context.l10n.split_sectionRooms,
+                  expanded: open(SplitSection.rooms, rooms.length),
+                  unread: roomsUnread,
+                  total: rooms.length,
+                  onTap: () => split.toggle(SplitSection.rooms),
+                ),
+                if (open(SplitSection.rooms, rooms.length))
+                  for (final c in rooms) _contactRow(c, split, connector),
+              ],
               if (query.trim().isNotEmpty &&
                   channels.isEmpty &&
                   companions.isEmpty &&

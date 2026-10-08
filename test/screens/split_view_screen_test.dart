@@ -147,6 +147,9 @@ void main() {
     expect(find.text('Rui'), findsOneWidget);
     expect(find.text('Public'), findsNothing);
     expect(find.text('Marta'), findsNothing);
+    // Sections without a match disappear instead of sitting there empty.
+    expect(find.text('CHANNELS'), findsNothing);
+    expect(find.text('COMPANIONS'), findsOneWidget);
   });
 
   testWidgets('shows the empty pane until something is picked', (tester) async {
