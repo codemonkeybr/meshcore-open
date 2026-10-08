@@ -448,12 +448,14 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
     double? minY,
     double? maxY,
     double minSpan = 1,
+    bool nonNegative = false,
+    bool integers = false,
     bool legend = false,
   }) {
     final scheme = Theme.of(context).colorScheme;
     final hasData = series.any((s) => s.points.isNotEmpty);
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -509,7 +511,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
                 ],
               ),
             ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
           if (!hasData)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 18),
@@ -531,6 +533,8 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
               minY: minY,
               maxY: maxY,
               minSpan: minSpan,
+              nonNegative: nonNegative,
+              integers: integers,
             ),
         ],
       ),
@@ -583,6 +587,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       ),
       _chartBlock(
         title: l10n.history_chartRssi,
+        integers: true,
         unit: 'dBm',
         minSpan: 20,
         start: start,
@@ -597,6 +602,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       ),
       _chartBlock(
         title: l10n.history_chartNoise,
+        integers: true,
         unit: 'dBm',
         minSpan: 20,
         start: start,
@@ -611,6 +617,8 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       ),
       _chartBlock(
         title: l10n.history_chartSent,
+        nonNegative: true,
+        integers: true,
         legend: true,
         start: start,
         end: end,
@@ -629,6 +637,8 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       ),
       _chartBlock(
         title: l10n.history_chartDuplicates,
+        nonNegative: true,
+        integers: true,
         legend: true,
         start: start,
         end: end,
@@ -647,6 +657,8 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       ),
       _chartBlock(
         title: l10n.history_chartErrors,
+        nonNegative: true,
+        integers: true,
         start: start,
         end: end,
         series: [
@@ -720,6 +732,21 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
         ),
       );
     }
+    if (entries.any((e) => e.value.length == 1)) {
+      children.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Text(
+            l10n.history_singleReading,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
     return [
       _buildSection(
         _Section.neighbors,
@@ -730,7 +757,6 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
   }
 
   Widget _singleReading(String name, double snr) {
-    final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(top: 14),
       child: Column(
@@ -749,14 +775,6 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
                 fontWeight: FontWeight.w600,
                 color: MeshTheme.snrColor(snr, blocked: false),
               ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Center(
-            child: Text(
-              context.l10n.history_singleReading,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
             ),
           ),
         ],
