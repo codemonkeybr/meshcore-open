@@ -66,18 +66,27 @@ class RepeaterHistoryFetcher {
   final int loginAttempts;
   final Duration loginReplyGrace;
 
+  /// How many times each of radio, neighbors and sensors is tried before it
+  /// is given up on, with [retryPause] between tries.
+  final int stepAttempts;
+  final Duration retryPause;
+
   RepeaterHistoryFetcher({
     required this.connector,
     required this.history,
     StorageService? storage,
     this.loginAttempts = 5,
     this.loginReplyGrace = const Duration(seconds: 2),
+    this.stepAttempts = 3,
+    this.retryPause = const Duration(seconds: 1),
   }) : storage = storage ?? StorageService();
 
   Future<HistoryFetchResult> fetch(
     Contact node, {
     String? password,
     void Function(HistoryFetchStep step, HistoryStepState state)? onProgress,
+    void Function(HistoryFetchStep step, int attempt, int maxAttempts)?
+    onAttempt,
   }) async {
     final steps = <HistoryFetchStep, HistoryStepState>{};
     void progress(HistoryFetchStep step, HistoryStepState state) {
@@ -130,13 +139,20 @@ class RepeaterHistoryFetcher {
     ) async {
       progress(step, HistoryStepState.running);
       var ok = false;
-      try {
-        ok = await action();
-      } catch (e) {
-        appLogger.warn(
-          'History fetch step $step failed: $e',
-          tag: 'TelemetryHistory',
-        );
+      for (var attempt = 1; attempt <= stepAttempts && !ok; attempt++) {
+        if (attempt > 1) {
+          await Future<void>.delayed(retryPause);
+          if (!connector.isConnected) break;
+        }
+        onAttempt?.call(step, attempt, stepAttempts);
+        try {
+          ok = await action();
+        } catch (e) {
+          appLogger.warn(
+            'History fetch step $step attempt $attempt failed: $e',
+            tag: 'TelemetryHistory',
+          );
+        }
       }
       if (ok) anyDone = true;
       progress(step, ok ? HistoryStepState.done : HistoryStepState.failed);
