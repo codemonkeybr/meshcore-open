@@ -40,6 +40,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
 
   bool _fetching = false;
   Map<HistoryFetchStep, HistoryStepState> _steps = {};
+  Map<HistoryFetchStep, String> _attempts = {};
   HistoryFetchFailure? _failure;
   bool _failureUsedSavedPassword = false;
 
@@ -72,6 +73,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
       _fetching = true;
       _failure = null;
       _steps = {};
+      _attempts = {};
     });
     final result =
         await RepeaterHistoryFetcher(
@@ -83,6 +85,10 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
           onProgress: (step, state) {
             if (!mounted) return;
             setState(() => _steps = {..._steps, step: state});
+          },
+          onAttempt: (step, attempt, max) {
+            if (!mounted) return;
+            setState(() => _attempts = {..._attempts, step: '$attempt/$max'});
           },
         );
     if (!mounted) return;
@@ -239,6 +245,7 @@ class _TelemetryHistoryScreenState extends State<TelemetryHistoryScreen> {
             _StepRow(
               label: label,
               state: _steps[step] ?? HistoryStepState.pending,
+              attempt: _attempts[step],
             ),
         ],
       ),
@@ -868,7 +875,11 @@ class _StepRow extends StatelessWidget {
   final String label;
   final HistoryStepState state;
 
-  const _StepRow({required this.label, required this.state});
+  /// "1/3" style counter, shown while the step is being tried (and after it
+  /// gave up, so the number of tries stays visible).
+  final String? attempt;
+
+  const _StepRow({required this.label, required this.state, this.attempt});
 
   @override
   Widget build(BuildContext context) {
@@ -898,14 +909,26 @@ class _StepRow extends StatelessWidget {
         children: [
           SizedBox(width: 18, child: Center(child: icon)),
           const SizedBox(width: 10),
-          Text(
-            label,
-            style: TextStyle(
-              color: state == HistoryStepState.pending
-                  ? scheme.onSurfaceVariant
-                  : scheme.onSurface,
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: state == HistoryStepState.pending
+                    ? scheme.onSurfaceVariant
+                    : scheme.onSurface,
+              ),
             ),
           ),
+          if (attempt != null &&
+              (state == HistoryStepState.running ||
+                  state == HistoryStepState.failed))
+            Text(
+              attempt!,
+              style: MeshTheme.mono(
+                fontSize: 12,
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
         ],
       ),
     );

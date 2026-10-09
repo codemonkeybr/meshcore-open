@@ -28,6 +28,10 @@ class _ScriptedConnector extends MeshCoreConnector {
   final List<String> loginPasswords = [];
   int nextTag = 1;
 
+  /// Status requests seen, and how many of the first ones go unanswered.
+  int statusRequests = 0;
+  int ignoreFirstStatusRequests = 0;
+
   @override
   bool get isConnected => connected;
 
@@ -80,7 +84,10 @@ class _ScriptedConnector extends MeshCoreConnector {
           ...prefix,
         ]);
       case cmdSendStatusReq:
-        if (!answerStatus) return;
+        statusRequests++;
+        if (!answerStatus || statusRequests <= ignoreFirstStatusRequests) {
+          return;
+        }
         handleFrameForTest(_statusFrame(prefix));
       case cmdSendBinaryReq:
         final type = data[33];
@@ -166,6 +173,7 @@ void main() {
         history: history,
         loginAttempts: 1,
         loginReplyGrace: Duration.zero,
+        retryPause: Duration.zero,
       );
 
   const deviceKey = 'aabbccddee';
@@ -276,6 +284,70 @@ void main() {
     final result = await fetcherFor(connector).fetch(node);
 
     expect(result.failure, HistoryFetchFailure.noAnswer);
+  });
+
+  test('a part that does not answer is tried up to three times', () async {
+    final node = _node(advTypeRepeater);
+    final connector = _ScriptedConnector(node)..answerStatus = false;
+    final attempts = <int>[];
+
+    final result = await fetcherFor(connector).fetch(
+      node,
+      onAttempt: (step, attempt, max) {
+        if (step == HistoryFetchStep.radio) {
+          expect(max, 3);
+          attempts.add(attempt);
+        }
+      },
+    );
+
+    expect(connector.statusRequests, 3);
+    expect(attempts, [1, 2, 3]);
+    expect(result.steps[HistoryFetchStep.radio], HistoryStepState.failed);
+    expect(result.steps[HistoryFetchStep.sensors], HistoryStepState.done);
+  });
+
+  test('a part that answers on a later try is saved', () async {
+    final node = _node(advTypeRepeater);
+    final connector = _ScriptedConnector(node)..ignoreFirstStatusRequests = 2;
+
+    final result = await fetcherFor(connector).fetch(node);
+
+    expect(connector.statusRequests, 3);
+    expect(result.steps[HistoryFetchStep.radio], HistoryStepState.done);
+    final saved = history.cached(
+      deviceKey,
+      TelemetryHistoryService.keyOf(node.publicKeyHex),
+    );
+    expect(saved.radio, hasLength(1));
+  });
+
+  test('a part that answers first time is not asked again', () async {
+    final node = _node(advTypeRepeater);
+    final connector = _ScriptedConnector(node);
+
+    await fetcherFor(connector).fetch(node);
+
+    expect(connector.statusRequests, 1);
+  });
+
+  test('there is a pause between attempts', () async {
+    final node = _node(advTypeRepeater);
+    final connector = _ScriptedConnector(node)..answerStatus = false;
+    final fetcher = RepeaterHistoryFetcher(
+      connector: connector,
+      history: history,
+      loginAttempts: 1,
+      loginReplyGrace: Duration.zero,
+      retryPause: const Duration(milliseconds: 150),
+    );
+
+    final started = DateTime.now();
+    await fetcher.fetch(node);
+    final took = DateTime.now().difference(started);
+
+    // Two pauses between three radio attempts (the other parts answer).
+    expect(took, greaterThanOrEqualTo(const Duration(milliseconds: 300)));
   });
 
   test('rooms skip neighbors', () async {
