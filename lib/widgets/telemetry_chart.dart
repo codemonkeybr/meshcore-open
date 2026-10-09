@@ -194,7 +194,8 @@ class TelemetryChart extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 20,
+                // Grows with the user's font size so the dates are not cut.
+                reservedSize: MediaQuery.textScalerOf(context).scale(10) + 14,
                 interval: spanDays / 3,
                 getTitlesWidget: (value, meta) {
                   final at = start.add(
