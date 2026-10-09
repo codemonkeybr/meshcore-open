@@ -15,6 +15,8 @@ import '../connector/meshcore_protocol.dart';
 import '../helpers/block_contact_flow.dart';
 import '../helpers/mute_contact_flow.dart';
 import '../helpers/ack_text.dart';
+import '../helpers/split_view_groups.dart';
+import '../helpers/split_view_handoff.dart';
 import '../helpers/cyr2lat.dart';
 import '../helpers/message_url_image_helper.dart';
 import '../helpers/path_helper.dart';
@@ -82,6 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _textFieldFocusNode = FocusNode();
   final GlobalKey _unreadScrollKey = GlobalKey();
   bool _isLoadingOlder = false;
+  bool _handedOffToSplitView = false;
   MeshCoreConnector? _connector;
   Message? _pendingUnreadScrollTarget;
   String? _unreadDividerMessageId;
@@ -178,7 +181,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    _connector?.setActiveContact(null);
+    _connector?.releaseActiveContact(widget.contact.publicKeyHex);
     _scrollController.showJumpToBottom.removeListener(_clearDividerAtBottom);
     _textFieldFocusNode.removeListener(_onTextFieldFocusChange);
     _textFieldFocusNode.dispose();
@@ -189,6 +192,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Unfolding with this chat open: show it in the split view instead.
+    if (!_handedOffToSplitView && shouldHandOffToSplitView(context)) {
+      _handedOffToSplitView = true;
+      handOffToSplitView(
+        context,
+        section: widget.contact.type == advTypeRoom
+            ? SplitSection.rooms
+            : SplitSection.companions,
+        contactKeyHex: widget.contact.publicKeyHex,
+        initialUnread: widget.initialUnreadCount,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Consumer2<PathHistoryService, MeshCoreConnector>(
