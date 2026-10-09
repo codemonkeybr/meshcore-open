@@ -335,10 +335,33 @@ class _SidebarState extends State<_Sidebar> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 8, 4, 0),
+          padding: const EdgeInsets.fromLTRB(12, 8, 8, 0),
+          child: Row(
+            children: [Expanded(child: AppBarTitle(context.l10n.split_title))],
+          ),
+        ),
+        const SyncProgressAppBarBottom(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 4, 4, 8),
           child: Row(
             children: [
-              Expanded(child: AppBarTitle(context.l10n.split_title)),
+              Expanded(
+                child: TextField(
+                  controller: widget.search,
+                  onChanged: (_) => setState(() {}),
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: context.l10n.split_searchHint,
+                    prefixIcon: const Icon(Icons.search, size: 20),
+                    suffixIcon: query.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.close, size: 18),
+                            onPressed: () => setState(widget.search.clear),
+                          ),
+                  ),
+                ),
+              ),
               IconButton(
                 tooltip: context.l10n.split_menuMap,
                 icon: const Icon(Icons.map_outlined),
@@ -385,25 +408,6 @@ class _SidebarState extends State<_Sidebar> {
                 ],
               ),
             ],
-          ),
-        ),
-        const SyncProgressAppBarBottom(),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-          child: TextField(
-            controller: widget.search,
-            onChanged: (_) => setState(() {}),
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: context.l10n.split_searchHint,
-              prefixIcon: const Icon(Icons.search, size: 20),
-              suffixIcon: query.isEmpty
-                  ? null
-                  : IconButton(
-                      icon: const Icon(Icons.close, size: 18),
-                      onPressed: () => setState(widget.search.clear),
-                    ),
-            ),
           ),
         ),
         Divider(height: 1, color: scheme.outlineVariant),
