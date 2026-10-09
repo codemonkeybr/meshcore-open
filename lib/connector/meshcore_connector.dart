@@ -915,6 +915,17 @@ class MeshCoreConnector extends ChangeNotifier {
     }
   }
 
+  /// Clears the open-conversation marker only if it still points at
+  /// [contactKeyHex], so a screen closing late cannot wipe the marker of the
+  /// conversation that replaced it.
+  void releaseActiveContact(String contactKeyHex) {
+    if (_activeContactKey == contactKeyHex) _activeContactKey = null;
+  }
+
+  void releaseActiveChannel(int channelIndex) {
+    if (_activeChannelIndex == channelIndex) _activeChannelIndex = null;
+  }
+
   void setActiveChannel(int? channelIndex) {
     _activeChannelIndex = channelIndex;
     if (channelIndex != null) {

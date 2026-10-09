@@ -13,6 +13,8 @@ import '../connector/meshcore_connector.dart';
 import '../models/community.dart';
 import '../storage/community_store.dart';
 import '../utils/platform_info.dart';
+import '../helpers/split_view_groups.dart';
+import '../helpers/split_view_handoff.dart';
 import '../helpers/chat_scroll_controller.dart';
 import '../connector/meshcore_protocol.dart';
 import '../helpers/cyr2lat.dart';
@@ -86,6 +88,7 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
   final CommunityPskIndex _communityIndex = CommunityPskIndex();
   final Map<String, GlobalKey> _messageKeys = {};
   bool _isLoadingOlder = false;
+  bool _handedOffToSplitView = false;
   bool _communitiesLoaded = false;
 
   /// Per-screen image-id allocator. The id is 8 bits and the reassembly key also
@@ -199,7 +202,7 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
 
   @override
   void dispose() {
-    _connector?.setActiveChannel(null);
+    _connector?.releaseActiveChannel(widget.channel.index);
     _scrollController.showJumpToBottom.removeListener(_clearDividerAtBottom);
     _textFieldFocusNode.removeListener(_onTextFieldFocusChange);
     _textFieldFocusNode.dispose();
@@ -299,6 +302,16 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Unfolding with this channel open: show it in the split view instead.
+    if (!_handedOffToSplitView && shouldHandOffToSplitView(context)) {
+      _handedOffToSplitView = true;
+      handOffToSplitView(
+        context,
+        section: SplitSection.channels,
+        channelIndex: widget.channel.index,
+        initialUnread: widget.initialUnreadCount,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
