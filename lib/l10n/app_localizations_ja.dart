@@ -5215,4 +5215,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return '158バイトを超える場合：最大 $count 回まで送信されます';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

@@ -9297,6 +9297,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Over 158 bytes: sent at most {count} times'**
   String chat_longMessageRetryNote(int count);
+
+  /// No description provided for @chat_mentionsYou.
+  ///
+  /// In en, this message translates to:
+  /// **'mentions you'**
+  String get chat_mentionsYou;
 }
 
 class _AppLocalizationsDelegate

@@ -5500,4 +5500,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Понад 158 байтів: надсилається не більше $count разів';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

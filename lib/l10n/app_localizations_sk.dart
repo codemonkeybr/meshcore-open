@@ -5460,4 +5460,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Nad 158 bajtov: odoslané najviac $count-krát';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

@@ -5507,4 +5507,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Plus de 158 octets : envoi au maximum $count fois';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

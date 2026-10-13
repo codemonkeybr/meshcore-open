@@ -5092,4 +5092,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return '超过158字节：最多发送 $count 次';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

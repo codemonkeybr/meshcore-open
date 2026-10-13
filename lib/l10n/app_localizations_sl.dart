@@ -5464,4 +5464,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Nad 158 bajtov: poslano največ $count-krat';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

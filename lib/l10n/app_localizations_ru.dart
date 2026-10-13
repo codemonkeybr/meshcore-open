@@ -5497,4 +5497,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Более 158 байт: отправляется не более $count раз';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

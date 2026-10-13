@@ -5225,4 +5225,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return '158바이트 초과 시: 최대 $count회 전송됩니다';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

@@ -3106,5 +3106,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "chat_mentionsYou": "mentions you"
 }

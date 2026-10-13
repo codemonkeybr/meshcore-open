@@ -5477,4 +5477,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Над 158 байта: изпраща се най-много $count пъти';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

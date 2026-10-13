@@ -5400,4 +5400,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Over 158 bytes: sent at most $count times';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

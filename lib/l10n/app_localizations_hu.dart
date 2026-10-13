@@ -5473,4 +5473,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return '158 bájt felett: legfeljebb $count alkalommal küldve';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

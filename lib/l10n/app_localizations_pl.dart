@@ -5511,4 +5511,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Powyżej 158 bajtów: wysyłane maksymalnie $count razy';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }

@@ -5451,4 +5451,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String chat_longMessageRetryNote(int count) {
     return 'Meer dan 158 bytes: maximaal $count keer verzonden';
   }
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }
