@@ -121,7 +121,10 @@ class LinkHandler {
     }
     final span = TextSpan(style: style, children: children);
     if (PlatformInfo.isDesktop) {
-      final selectable = SelectableText.rich(span);
+      final selectable = SelectableText.rich(
+        span,
+        textScaler: TextScaler.noScaling,
+      );
       if (onSecondaryTap == null) return selectable;
       return Listener(
         onPointerDown: (event) {
@@ -131,7 +134,7 @@ class LinkHandler {
         child: selectable,
       );
     }
-    return Text.rich(span);
+    return Text.rich(span, textScaler: TextScaler.noScaling);
   }
 
   static Future<void> handleLinkTap(BuildContext context, String url) async {
