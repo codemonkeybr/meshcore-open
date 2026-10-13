@@ -2851,30 +2851,7 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
       ),
     );
     if (messageId == null || !mounted) return;
-    _showInChat(messageId);
-  }
-
-  /// Scrolls to a message, first jumping near it so the lazy list builds it.
-  void _showInChat(String messageId) {
-    if (_messageKeys[messageId]?.currentContext != null) {
-      _scrollToMessage(messageId);
-      return;
-    }
-    final messages = context.read<MeshCoreConnector>().getChannelMessages(
-      widget.channel,
-    );
-    final index = messages.indexWhere((m) => m.messageId == messageId);
-    if (index < 0) {
-      _scrollToMessage(messageId);
-      return;
-    }
-    _scrollController.jumpToEstimatedOffset(
-      unreadCount: messages.length - index,
-      totalMessages: messages.length,
-      onJumped: () {
-        if (mounted) _scrollToMessage(messageId);
-      },
-    );
+    _scrollToMessage(messageId);
   }
 
   void _copyMessageText(String text) {
