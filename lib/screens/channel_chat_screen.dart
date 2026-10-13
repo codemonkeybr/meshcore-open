@@ -219,28 +219,84 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
     });
   }
 
+  /// Scrolls to [messageId], bringing it on screen first when the lazy list
+  /// has not built it yet (it may be far above the viewport). Shows an error
+  /// unless [quiet] when the message is gone or cannot be reached.
   Future<void> _scrollToMessage(String messageId, {bool quiet = false}) async {
-    final key = _messageKeys[messageId];
-    if (key == null) {
-      // The auto unread-jump can resolve a frame after navigating away;
-      // a deactivated context can't host a snackbar.
-      if (quiet || !mounted || !context.mounted) return;
-      showDismissibleSnackBar(
-        context,
-        content: Text(context.l10n.chat_originalMessageNotFound),
-        duration: const Duration(seconds: 2),
-      );
+    if (!mounted) return;
+    final messages = context.read<MeshCoreConnector>().getChannelMessages(
+      widget.channel,
+    );
+    final target = messages.indexWhere((m) => m.messageId == messageId);
+    if (target < 0) {
+      _showMessageNotFound(quiet);
       return;
     }
 
-    final targetContext = key.currentContext;
-    if (targetContext == null) return;
+    bool built(int i) =>
+        _messageKeys[messages[i].messageId]?.currentContext != null;
 
-    await Scrollable.ensureVisible(
-      targetContext,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      alignment: 0.3,
+    // First a proportional jump, then viewport-sized steps towards the target
+    // until its row is built.
+    for (var attempt = 0; attempt < 60; attempt++) {
+      final targetContext = _messageKeys[messageId]?.currentContext;
+      if (targetContext != null && targetContext.mounted) {
+        await Scrollable.ensureVisible(
+          targetContext,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          alignment: 0.3,
+        );
+        return;
+      }
+      if (!_scrollController.hasClients) break;
+      final position = _scrollController.position;
+      final fromNewest = messages.length - 1 - target;
+      double offset;
+      if (attempt == 0) {
+        offset = position.maxScrollExtent * (fromNewest / messages.length);
+      } else {
+        // List is reversed: a larger offset shows older messages.
+        var oldestBuilt = -1;
+        var newestBuilt = -1;
+        for (var i = 0; i < messages.length; i++) {
+          if (!built(i)) continue;
+          if (oldestBuilt < 0) oldestBuilt = i;
+          newestBuilt = i;
+        }
+        final towardsOlder = oldestBuilt < 0 || target < oldestBuilt;
+        if (!towardsOlder && target <= newestBuilt) break;
+        final step = position.viewportDimension * 0.8;
+        offset = position.pixels + (towardsOlder ? step : -step);
+      }
+      _scrollController.jumpTo(
+        offset.clamp(0.0, position.maxScrollExtent).toDouble(),
+      );
+      await WidgetsBinding.instance.endOfFrame;
+      if (!mounted) return;
+    }
+
+    final targetContext = _messageKeys[messageId]?.currentContext;
+    if (targetContext != null && targetContext.mounted) {
+      await Scrollable.ensureVisible(
+        targetContext,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        alignment: 0.3,
+      );
+    } else {
+      _showMessageNotFound(quiet);
+    }
+  }
+
+  void _showMessageNotFound(bool quiet) {
+    // The auto unread-jump can resolve a frame after navigating away;
+    // a deactivated context can't host a snackbar.
+    if (quiet || !mounted) return;
+    showDismissibleSnackBar(
+      context,
+      content: Text(context.l10n.chat_originalMessageNotFound),
+      duration: const Duration(seconds: 2),
     );
   }
 
