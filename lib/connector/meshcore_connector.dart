@@ -7189,7 +7189,11 @@ class MeshCoreConnector extends ChangeNotifier {
     final replyInfo = ChannelMessage.parseReplyMention(message.text);
     ChannelMessage processedMessage = message;
 
-    if (replyInfo != null) {
+    // An outgoing message without a reply target is a plain @[Name] mention
+    // typed by the user, not a reply, so it keeps its text and shows a chip.
+    final isPlainOutgoingMention =
+        message.isOutgoing && message.replyToMessageId == null;
+    if (replyInfo != null && !isPlainOutgoingMention) {
       // Outgoing replies already carry the selected target. The wire format
       // only names the sender, so incoming replies fall back to that
       // sender's most recent message.
