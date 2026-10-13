@@ -5837,4 +5837,34 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chat_mentionsYou => 'mentions you';
+
+  @override
+  String get starred_title => 'Starred messages';
+
+  @override
+  String get starred_star => 'Star message';
+
+  @override
+  String get starred_unstar => 'Remove star';
+
+  @override
+  String get starred_showInChat => 'Show in chat';
+
+  @override
+  String get starred_reverseOrder => 'Reverse order';
+
+  @override
+  String get starred_emptyTitle => 'No starred messages';
+
+  @override
+  String get starred_emptyBody =>
+      'Long-press a message and choose Star message to keep it here.';
+
+  @override
+  String get starred_gif => 'GIF';
+
+  @override
+  String starred_limitReached(int count) {
+    return 'Starred limit reached ($count). The oldest star was removed.';
+  }
 }

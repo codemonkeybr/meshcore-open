@@ -17,6 +17,7 @@ import 'services/split_view_state.dart';
 import 'services/telemetry_history_service.dart';
 import 'storage/telemetry_history_store_factory.dart';
 import 'services/image_chunk_transport.dart';
+import 'services/starred_messages_service.dart';
 import 'services/image_codec_service.dart';
 import 'services/image_codec_settings_store.dart';
 import 'services/received_image_blob_store_factory.dart';
@@ -413,6 +414,7 @@ class _MeshCoreAppState extends State<MeshCoreApp> with WidgetsBindingObserver {
           create: (_) => TelemetryHistoryService(createTelemetryHistoryStore()),
         ),
         ChangeNotifierProvider(create: (_) => SplitViewState()),
+        ChangeNotifierProvider(create: (_) => StarredMessagesService()),
       ],
       child: Consumer<AppSettingsService>(
         builder: (context, settingsService, child) {

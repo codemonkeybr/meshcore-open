@@ -63,6 +63,8 @@ import 'app_settings_screen.dart';
 import 'channel_message_path_screen.dart';
 import 'map_screen.dart';
 import 'region_management_screen.dart';
+import 'starred_messages_screen.dart';
+import '../services/starred_messages_service.dart';
 import '../storage/region_store.dart';
 
 class ChannelChatScreen extends StatefulWidget {
@@ -408,9 +410,46 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
             onSelected: (value) {
               if (value == 'clearChat') {
                 _confirmClearChat();
+              } else if (value == 'starred') {
+                _openStarred();
               }
             },
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'starred',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.star_rounded,
+                      size: 20,
+                      color: MeshPalette.warn,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(child: Text(context.l10n.starred_title)),
+                    Builder(
+                      builder: (context) {
+                        final count = context
+                            .watch<StarredMessagesService>()
+                            .count(
+                              context
+                                  .read<MeshCoreConnector>()
+                                  .selfPublicKeyHex,
+                              widget.channel.index,
+                            );
+                        if (count == 0) return const SizedBox.shrink();
+                        return Text(
+                          '$count',
+                          style: MeshTheme.mono(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: MeshPalette.warn,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 value: 'clearChat',
                 child: Row(
@@ -974,6 +1013,22 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                                   color: metaColor,
                                 ),
                               ),
+                              if (context
+                                  .watch<StarredMessagesService>()
+                                  .isStarred(
+                                    context
+                                        .read<MeshCoreConnector>()
+                                        .selfPublicKeyHex,
+                                    widget.channel.index,
+                                    message.messageId,
+                                  )) ...[
+                                const SizedBox(width: 6),
+                                Icon(
+                                  Icons.star_rounded,
+                                  size: 14 * textScale,
+                                  color: MeshPalette.warn,
+                                ),
+                              ],
                               if (enableTracing &&
                                   !isOutgoing &&
                                   message.repeatCount > 0) ...[
@@ -2508,6 +2563,26 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                 _setReplyingTo(message);
               },
             ),
+            Builder(
+              builder: (_) {
+                final starred = _isStarred(message);
+                return ListTile(
+                  leading: Icon(
+                    starred ? Icons.star_rounded : Icons.star_border_rounded,
+                    color: MeshPalette.warn,
+                  ),
+                  title: Text(
+                    starred
+                        ? context.l10n.starred_unstar
+                        : context.l10n.starred_star,
+                  ),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    _toggleStar(message);
+                  },
+                );
+              },
+            ),
             if (!message.isOutgoing)
               ListTile(
                 leading: const Icon(Icons.network_check),
@@ -2690,6 +2765,60 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
     final hash = message.computeReactionHash();
     final reactionText = ReactionHelper.encodeReaction(hash, emojiIndex);
     connector.sendChannelMessage(widget.channel, reactionText);
+  }
+
+  String get _deviceKey => context.read<MeshCoreConnector>().selfPublicKeyHex;
+
+  bool _isStarred(ChannelMessage message) => context
+      .read<StarredMessagesService>()
+      .isStarred(_deviceKey, widget.channel.index, message.messageId);
+
+  Future<void> _toggleStar(ChannelMessage message) async {
+    final result = await context.read<StarredMessagesService>().toggle(
+      _deviceKey,
+      widget.channel.index,
+      message,
+    );
+    if (!mounted || result != StarResult.starredDroppedOldest) return;
+    showDismissibleSnackBar(
+      context,
+      content: Text(
+        context.l10n.starred_limitReached(StarredMessagesService.maxPerChannel),
+      ),
+    );
+  }
+
+  Future<void> _openStarred() async {
+    final messageId = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => StarredMessagesScreen(channel: widget.channel),
+      ),
+    );
+    if (messageId == null || !mounted) return;
+    _showInChat(messageId);
+  }
+
+  /// Scrolls to a message, first jumping near it so the lazy list builds it.
+  void _showInChat(String messageId) {
+    if (_messageKeys[messageId]?.currentContext != null) {
+      _scrollToMessage(messageId);
+      return;
+    }
+    final messages = context.read<MeshCoreConnector>().getChannelMessages(
+      widget.channel,
+    );
+    final index = messages.indexWhere((m) => m.messageId == messageId);
+    if (index < 0) {
+      _scrollToMessage(messageId);
+      return;
+    }
+    _scrollController.jumpToEstimatedOffset(
+      unreadCount: messages.length - index,
+      totalMessages: messages.length,
+      onJumped: () {
+        if (mounted) _scrollToMessage(messageId);
+      },
+    );
   }
 
   void _copyMessageText(String text) {
