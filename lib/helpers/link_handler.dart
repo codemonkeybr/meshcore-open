@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/l10n.dart';
 import '../utils/platform_info.dart';
 import '../helpers/snack_bar_builder.dart';
+import 'mention_text.dart';
 
 class LinkHandler {
   static TextStyle defaultLinkStyle(BuildContext context, TextStyle base) {
@@ -22,7 +23,19 @@ class LinkHandler {
     required TextStyle style,
     TextStyle? linkStyle,
     VoidCallback? onSecondaryTap,
+    bool highlightMentions = false,
+    String? selfName,
   }) {
+    if (highlightMentions && text.contains('@[')) {
+      return _buildMentionText(
+        context: context,
+        text: text,
+        style: style,
+        linkStyle: linkStyle,
+        onSecondaryTap: onSecondaryTap,
+        selfName: selfName,
+      );
+    }
     final effectiveLinkStyle = linkStyle ?? defaultLinkStyle(context, style);
     const options = LinkifyOptions(humanize: false, defaultToHttps: false);
     const linkifiers = [UrlLinkifier(), EmailLinkifier()];
@@ -54,6 +67,71 @@ class LinkHandler {
       linkifiers: linkifiers,
       onOpen: onOpen,
     );
+  }
+
+  /// Like [buildLinkifyText] but also styles `@[Name]` mentions as chips;
+  /// one naming [selfName] is amber.
+  static Widget _buildMentionText({
+    required BuildContext context,
+    required String text,
+    required TextStyle style,
+    required String? selfName,
+    TextStyle? linkStyle,
+    VoidCallback? onSecondaryTap,
+  }) {
+    final effectiveLinkStyle = linkStyle ?? defaultLinkStyle(context, style);
+    const options = LinkifyOptions(humanize: false, defaultToHttps: false);
+    var elements = <LinkifyElement>[TextElement(text)];
+    for (final linkifier in const [UrlLinkifier(), EmailLinkifier()]) {
+      elements = linkifier.parse(elements, options);
+    }
+    final linked = buildTextSpan(
+      elements,
+      style: style,
+      linkStyle: effectiveLinkStyle,
+      onOpen: (link) => handleLinkTap(context, link.url),
+    );
+    final base = style.color ?? Theme.of(context).colorScheme.onSurface;
+    final me = selfName?.trim().toLowerCase();
+    final children = <InlineSpan>[];
+    for (final child in linked.children ?? const <InlineSpan>[]) {
+      if (child is TextSpan && child.recognizer == null && child.text != null) {
+        for (final piece in splitMentions(child.text!)) {
+          if (!piece.isMention) {
+            children.add(TextSpan(text: piece.text, style: child.style));
+            continue;
+          }
+          final isMe = piece.name!.trim().toLowerCase() == me;
+          children.add(
+            TextSpan(
+              text: piece.text,
+              style: (child.style ?? style).copyWith(
+                fontWeight: FontWeight.w600,
+                color: isMe ? const Color(0xFF5C4300) : base,
+                backgroundColor: isMe
+                    ? const Color(0xFFFFE08A)
+                    : base.withValues(alpha: 0.14),
+              ),
+            ),
+          );
+        }
+      } else {
+        children.add(child);
+      }
+    }
+    final span = TextSpan(style: style, children: children);
+    if (PlatformInfo.isDesktop) {
+      final selectable = SelectableText.rich(span);
+      if (onSecondaryTap == null) return selectable;
+      return Listener(
+        onPointerDown: (event) {
+          if (event.buttons & kSecondaryMouseButton != 0) onSecondaryTap();
+        },
+        behavior: HitTestBehavior.translucent,
+        child: selectable,
+      );
+    }
+    return Text.rich(span);
   }
 
   static Future<void> handleLinkTap(BuildContext context, String url) async {

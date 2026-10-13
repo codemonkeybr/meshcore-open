@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../connector/meshcore_connector.dart';
+import '../helpers/mention_text.dart';
 import '../models/community.dart';
 import '../storage/community_store.dart';
 import '../utils/platform_info.dart';
@@ -649,6 +650,8 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
     final bubbleBorder = isOutgoing
         ? MeshPalette.meBorder
         : scheme.outlineVariant;
+    final selfName = context.read<MeshCoreConnector>().selfName;
+    final mentionsMe = !isOutgoing && mentionsName(message.text, selfName);
     final textColor = isOutgoing ? MeshPalette.meInk : scheme.onSurface;
     final metaColor = textColor.withValues(alpha: 0.65);
     const bodyFontSize = 14.0;
@@ -674,6 +677,8 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
               onSecondaryTap: PlatformInfo.isDesktop
                   ? () => _showMessageActions(message)
                   : null,
+              highlightMentions: true,
+              selfName: selfName,
             ),
           ),
         ],
@@ -732,7 +737,12 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                     decoration: BoxDecoration(
                       color: bubbleColor,
                       borderRadius: borderRadius,
-                      border: Border.all(color: bubbleBorder, width: 1),
+                      border: Border.all(
+                        color: mentionsMe
+                            ? const Color(0xFFE0A200)
+                            : bubbleBorder,
+                        width: mentionsMe ? 2 : 1,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -746,8 +756,25 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                                     bottom: 4,
                                   )
                                 : EdgeInsets.zero,
-                            child: Text(
-                              message.senderName,
+                            child: Text.rich(
+                              TextSpan(
+                                text: message.senderName,
+                                children: [
+                                  if (mentionsMe)
+                                    TextSpan(
+                                      text:
+                                          '  ${context.l10n.chat_mentionsYou}',
+                                      style: TextStyle(
+                                        fontSize: 10 * textScale,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFF5C4300),
+                                        backgroundColor: const Color(
+                                          0xFFFFE08A,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                               style: TextStyle(
                                 fontSize: 13 * textScale,
                                 fontWeight: FontWeight.w700,
@@ -828,6 +855,8 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                                         onSecondaryTap: PlatformInfo.isDesktop
                                             ? () => _showMessageActions(message)
                                             : null,
+                                        highlightMentions: true,
+                                        selfName: selfName,
                                       ),
                                     ),
                                   ],
@@ -2052,6 +2081,7 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
                 },
               ),
             if (_imageSendTotal > 0) _buildImageSendProgress(scheme),
+            _buildMentionSuggestions(scheme),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Row(
@@ -2240,6 +2270,86 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
     );
   }
 
+  /// Senders in this channel, most recent first.
+  List<String> _recentSenders() {
+    final messages = context.read<MeshCoreConnector>().getChannelMessages(
+      widget.channel,
+    );
+    return [
+      for (var i = messages.length - 1; i >= 0; i--)
+        if (!messages[i].isOutgoing) messages[i].senderName,
+    ];
+  }
+
+  Widget _buildMentionSuggestions(ColorScheme scheme) {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: _textController,
+      builder: (context, value, _) {
+        final cursor = value.selection.baseOffset;
+        final token = value.selection.isCollapsed
+            ? activeMentionQuery(value.text, cursor)
+            : null;
+        if (token == null) return const SizedBox.shrink();
+        final names = mentionCandidates(
+          _recentSenders(),
+          token.query,
+          selfName: context.read<MeshCoreConnector>().selfName,
+        );
+        if (names.isEmpty) return const SizedBox.shrink();
+        return Container(
+          constraints: const BoxConstraints(maxHeight: 200),
+          margin: const EdgeInsets.fromLTRB(8, 6, 8, 0),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(MeshRadii.md),
+            border: Border.all(color: scheme.outlineVariant),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(MeshRadii.md),
+            child: ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: names.length,
+              itemBuilder: (context, i) {
+                final name = names[i];
+                return ListTile(
+                  dense: true,
+                  leading: CircleAvatar(
+                    radius: 12,
+                    backgroundColor: scheme.primary,
+                    foregroundColor: scheme.onPrimary,
+                    child: Text(
+                      name.characters.first.toUpperCase(),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                  title: Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  onTap: () {
+                    final result = insertMention(
+                      value.text,
+                      token,
+                      cursor,
+                      name,
+                    );
+                    _textController.value = TextEditingValue(
+                      text: result.text,
+                      selection: TextSelection.collapsed(offset: result.cursor),
+                    );
+                    _textFieldFocusNode.requestFocus();
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> _showTranslationOptions() async {
     final settingsService = context.read<AppSettingsService>();
     final settings = settingsService.settings;
@@ -2299,7 +2409,10 @@ class _ChannelChatScreenState extends State<ChannelChatScreen> {
       }
     }
     if (_replyingToMessage != null) {
-      messageText = '@[${_replyingToMessage!.senderName}] $messageText';
+      messageText = withReplyMention(
+        messageText,
+        _replyingToMessage!.senderName,
+      );
     }
     final replyRegion = _useReplyRegion ? _replyingToMessage?.region : null;
 

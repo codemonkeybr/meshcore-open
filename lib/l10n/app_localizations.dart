@@ -9861,6 +9861,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Discover contacts'**
   String get split_menuDiscover;
+
+  /// No description provided for @chat_mentionsYou.
+  ///
+  /// In en, this message translates to:
+  /// **'mentions you'**
+  String get chat_mentionsYou;
 }
 
 class _AppLocalizationsDelegate

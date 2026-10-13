@@ -3322,5 +3322,6 @@
   "split_emptyTitle": "Pick something on the left",
   "split_emptyBody": "Choose a channel, companion, repeater or room to open it here.",
   "split_menuMap": "Map",
-  "split_menuDiscover": "Discover contacts"
+  "split_menuDiscover": "Discover contacts",
+  "chat_mentionsYou": "mentions you"
 }

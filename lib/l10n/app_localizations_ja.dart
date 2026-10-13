@@ -5542,4 +5542,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get split_menuDiscover => 'Discover contacts';
+
+  @override
+  String get chat_mentionsYou => 'mentions you';
 }
