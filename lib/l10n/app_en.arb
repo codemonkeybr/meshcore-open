@@ -3106,5 +3106,21 @@
         "type": "int"
       }
     }
+  },
+  "starred_title": "Starred messages",
+  "starred_star": "Star message",
+  "starred_unstar": "Remove star",
+  "starred_showInChat": "Show in chat",
+  "starred_reverseOrder": "Reverse order",
+  "starred_emptyTitle": "No starred messages",
+  "starred_emptyBody": "Long-press a message and choose Star message to keep it here.",
+  "starred_gif": "GIF",
+  "starred_limitReached": "Starred limit reached ({count}). The oldest star was removed.",
+  "@starred_limitReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

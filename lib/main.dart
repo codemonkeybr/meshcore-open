@@ -14,6 +14,7 @@ import 'connector/meshcore_connector.dart';
 import 'models/image_codec_support.dart';
 import 'screens/scanner_screen.dart';
 import 'services/image_chunk_transport.dart';
+import 'services/starred_messages_service.dart';
 import 'services/image_codec_service.dart';
 import 'services/image_codec_settings_store.dart';
 import 'services/received_image_blob_store_factory.dart';
@@ -406,6 +407,7 @@ class _MeshCoreAppState extends State<MeshCoreApp> with WidgetsBindingObserver {
         ChangeNotifierProvider.value(value: widget.timeoutPredictionService),
         ChangeNotifierProvider.value(value: widget.imageCodecService),
         ChangeNotifierProvider.value(value: widget.receivedImageStore),
+        ChangeNotifierProvider(create: (_) => StarredMessagesService()),
       ],
       child: Consumer<AppSettingsService>(
         builder: (context, settingsService, child) {

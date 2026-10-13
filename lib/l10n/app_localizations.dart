@@ -9297,6 +9297,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Over 158 bytes: sent at most {count} times'**
   String chat_longMessageRetryNote(int count);
+
+  /// No description provided for @starred_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Starred messages'**
+  String get starred_title;
+
+  /// No description provided for @starred_star.
+  ///
+  /// In en, this message translates to:
+  /// **'Star message'**
+  String get starred_star;
+
+  /// No description provided for @starred_unstar.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove star'**
+  String get starred_unstar;
+
+  /// No description provided for @starred_showInChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in chat'**
+  String get starred_showInChat;
+
+  /// No description provided for @starred_reverseOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse order'**
+  String get starred_reverseOrder;
+
+  /// No description provided for @starred_emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No starred messages'**
+  String get starred_emptyTitle;
+
+  /// No description provided for @starred_emptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Long-press a message and choose Star message to keep it here.'**
+  String get starred_emptyBody;
+
+  /// No description provided for @starred_gif.
+  ///
+  /// In en, this message translates to:
+  /// **'GIF'**
+  String get starred_gif;
+
+  /// No description provided for @starred_limitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Starred limit reached ({count}). The oldest star was removed.'**
+  String starred_limitReached(int count);
 }
 
 class _AppLocalizationsDelegate
