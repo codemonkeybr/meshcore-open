@@ -116,6 +116,7 @@ class ByteCountedTextField extends StatelessWidget {
                 ),
               ],
               textCapitalization: textCapitalization,
+              spellCheckConfiguration: const SpellCheckConfiguration(),
               decoration:
                   decoration ??
                   InputDecoration(
