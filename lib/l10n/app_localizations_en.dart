@@ -5729,6 +5729,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get split_menuDiscover => 'Discover contacts';
 
   @override
+  String get split_menuRefreshChannels => 'Refresh channels';
+
+  @override
   String get chat_mentionsYou => 'mentions you';
 
   @override

@@ -9862,6 +9862,12 @@ abstract class AppLocalizations {
   /// **'Discover contacts'**
   String get split_menuDiscover;
 
+  /// No description provided for @split_menuRefreshChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh channels'**
+  String get split_menuRefreshChannels;
+
   /// No description provided for @chat_mentionsYou.
   ///
   /// In en, this message translates to:

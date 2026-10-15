@@ -381,6 +381,8 @@ class _SidebarState extends State<_Sidebar> {
                           builder: (_) => const DiscoveryScreen(),
                         ),
                       );
+                    case 'refreshChannels':
+                      connector.getChannels(force: true);
                     case 'settings':
                       Navigator.push(
                         context,
@@ -396,6 +398,10 @@ class _SidebarState extends State<_Sidebar> {
                   PopupMenuItem(
                     value: 'discover',
                     child: Text(context.l10n.split_menuDiscover),
+                  ),
+                  PopupMenuItem(
+                    value: 'refreshChannels',
+                    child: Text(context.l10n.split_menuRefreshChannels),
                   ),
                   PopupMenuItem(
                     value: 'settings',

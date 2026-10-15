@@ -3323,6 +3323,7 @@
   "split_emptyBody": "Choose a channel, companion, repeater or room to open it here.",
   "split_menuMap": "Map",
   "split_menuDiscover": "Discover contacts",
+  "split_menuRefreshChannels": "Refresh channels",
   "chat_mentionsYou": "mentions you",
   "starred_title": "Starred messages",
   "starred_star": "Star message",
