@@ -93,7 +93,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "de": [
@@ -190,7 +201,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "es": [
@@ -287,7 +309,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "fr": [
@@ -384,7 +417,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "hu": [
@@ -481,7 +525,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "it": [
@@ -578,7 +633,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "ja": [
@@ -675,7 +741,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "ko": [
@@ -772,7 +849,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "nl": [
@@ -869,7 +957,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "pl": [
@@ -966,7 +1065,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "pt": [
@@ -1063,7 +1173,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "ru": [
@@ -1160,7 +1281,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "sk": [
@@ -1257,7 +1389,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "sl": [
@@ -1354,7 +1497,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "sv": [
@@ -1451,7 +1605,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "uk": [
@@ -1548,7 +1713,18 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ],
 
   "zh": [
@@ -1645,6 +1821,17 @@
     "split_emptyTitle",
     "split_emptyBody",
     "split_menuMap",
-    "split_menuDiscover"
+    "split_menuDiscover",
+    "split_menuRefreshChannels",
+    "chat_mentionsYou",
+    "starred_title",
+    "starred_star",
+    "starred_unstar",
+    "starred_showInChat",
+    "starred_reverseOrder",
+    "starred_emptyTitle",
+    "starred_emptyBody",
+    "starred_gif",
+    "starred_limitReached"
   ]
 }
